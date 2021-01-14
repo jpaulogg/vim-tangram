@@ -31,9 +31,9 @@ imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 imap <unique><silent> <C-s>n <C-c>:call  <SID>Search('z')<CR>
 smap <unique><silent> <C-s>n <C-c>:call  <SID>Search('z')<CR>
 smap <unique><silent> <C-n>  <C-c>:call  <SID>Search('z')<CR>
-imap <unique><silent> <C-s>p <C-c>h:call <SID>Search('b')<CR>
-smap <unique><silent> <C-s>p <C-c>h:call <SID>Search('b')<CR>
-smap <unique><silent> <C-p>  <C-c>h:call <SID>Search('b')<CR>
+imap <unique><silent> <C-s>p <C-c>b:call <SID>Search('b')<CR>
+smap <unique><silent> <C-s>p <C-c>b:call <SID>Search('b')<CR>
+smap <unique><silent> <C-p>  <C-c>b:call <SID>Search('b')<CR>
 
 " add/delete delimiters 's:start' end 's:end' to/from selection
 vmap <unique> <C-s>a <C-c>:call <SID>AddSurround()<CR>
