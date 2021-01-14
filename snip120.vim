@@ -2,14 +2,14 @@
 
 " Author:  João Paulo G. Garcia
 " Licence: public domain
-" Last Change: 2021/01/13  
+" Last Change: 2021/01/14  
 
 " Snippets with only 120 lines of vimscript!
 "
-" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next)  and
-" CTRL-S_P (previous). For faster movement in SELECT mode you can keep  CTRL
-" pressed and then move with 'sn' or 'sp'. Check the comments below for more
-" info's and functionalities.
+" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next) and
+" CTRL-S_P (previous). For faster movement in SELECT mode you can also  use
+" CTRL-N  and  CTRL-P.  Check  the  comments  below  for  more  info's  and
+" other mappings.
 
 if exists('g:loaded_snip120')
 	finish
@@ -19,26 +19,26 @@ let g:loaded_snip120 = 1
 " you can change both snippets directory path and tags delimiters below.
 " (delimiters must start with unique '<' and end with unique '>')
 let s:dir   = "~/.config/nvim/snippets/"
-let s:start = '<{'            " ex: let s:start = '<-:'
-let s:end   = '}>'            "     let s:end   = ':->'
+let s:start = '<{'                      " example: let s:start = '<-:'
+let s:end   = '}>'                      "          let s:end   = ':->'
 
 " INSERT SNIPPET
 " mappings {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through tags
-imap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
-smap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
-smap <unique><silent> <C-s><C-n> <C-c>:call  <SID>Search('z')<CR>
-imap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
-smap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
-smap <unique><silent> <C-s><C-p> <C-c>h:call <SID>Search('b')<CR>
+imap <unique><silent> <C-s>n <C-c>:call  <SID>Search('z')<CR>
+smap <unique><silent> <C-s>n <C-c>:call  <SID>Search('z')<CR>
+smap <unique><silent> <C-n>  <C-c>:call  <SID>Search('z')<CR>
+imap <unique><silent> <C-s>p <C-c>h:call <SID>Search('b')<CR>
+smap <unique><silent> <C-s>p <C-c>h:call <SID>Search('b')<CR>
+smap <unique><silent> <C-p>  <C-c>h:call <SID>Search('b')<CR>
 
-" add/delete delimiters (defaults are '<{' and '}>') to/from selection
+" add/delete delimiters 's:start' end 's:end' to/from selection
 vmap <unique> <C-s>a <C-c>:call <SID>AddSurround()<CR>
 vmap <unique> <C-s>d <C-c>:call <SID>DelSurround()<CR>
 
-" expand simple expression inside tags (like '<{strftime('%c')}>', for example)
+" expand simple expression inside tags (like '<{strftime('%c')}>')
 " overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
