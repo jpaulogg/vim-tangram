@@ -14,7 +14,8 @@ if exists('g:loaded_snip80')
 endif
 let g:loaded_snip80 = 1
 
-" you can change both snippets directory path and tags delimiter below:
+" you can change both snippets directory path and tags delimiter below.
+" (delimiter must end with '>')
 let s:dir   = "~/.config/nvim/snippets/"
 let s:delim = '}>'
 
