@@ -5,8 +5,8 @@
 " Last Change: 2021/01/13  
 
 " Snippets with only 80 lines of code!
-" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_CTRL-N (next)
-" and CTRL-S_CTRL-P (previous). Other functionalities in 'mappings' section.
+" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next)
+" and CTRL-S_P (previous). Other functionalities in 'mappings' section.
 
 " load once
 if exists('g:loaded_snip80')
@@ -15,7 +15,7 @@ endif
 let g:loaded_snip80 = 1
 
 " you can change both snippets directory path and tags delimiter below.
-" (delimiter must end with '>')
+" (delimiter must end with an unique '>')
 let s:dir   = "~/.config/nvim/snippets/"
 let s:delim = '}>'
 
@@ -24,9 +24,13 @@ let s:delim = '}>'
 imap <unique><silent> <C-s>i <C-c>:call   <SID>Insert()<CR>
 
 " jump through tags
+imap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
 imap <unique><silent> <C-s><C-n> <C-c>:call  <SID>Search('z')<CR>
+smap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
 smap <unique><silent> <C-s><C-n> <C-c>:call  <SID>Search('z')<CR>
+imap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
 imap <unique><silent> <C-s><C-p> <C-c>h:call <SID>Search('b')<CR>
+smap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
 smap <unique><silent> <C-s><C-p> <C-c>h:call <SID>Search('b')<CR>
 
 " add/delete delimiters '<{}>' to/from selection
