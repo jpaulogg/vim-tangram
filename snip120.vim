@@ -5,11 +5,12 @@
 " Last Change: 2021/01/14  
 
 " Snippets with only 120 lines of vimscript!
-"
-" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next) and
-" CTRL-S_P (previous). For faster movement in SELECT mode you can also  use
-" CTRL-N  and  CTRL-P.  Check  the  comments  below  for  more  info's  and
-" other mappings.
+
+" In insert mode <C-x><C-u> find snippets matching keyword  in  front  of  the
+" cursor; <C-s>i delete keyword and insert the snippet; <C-s>n and <C-s>p move
+" through the snippet tags. In select mode, <C-n> and <C-p> move through  tags
+" (<C-s>n and <C-s>p still work); <C-s>a and <C-s>d add and delete  delimiters
+" from selection; <C-s>e expand expressions inside delimiters.
 
 if exists('g:loaded_snip120')
 	finish
@@ -85,7 +86,7 @@ endfunction
 " COMPLETE SNIPPETS NAMES
 set completefunc=SnipComplete    " {{{1
 
-function SnipComplete(findstart, base) abort
+function SnipComplete(findstart, base)
     if a:findstart
         let l:line  = getline('.')
         let l:start = col('.') - 1
@@ -98,8 +99,7 @@ function SnipComplete(findstart, base) abort
 			let l:subdir = matchstr(getline('.'), "\\a\\+")
 			let l:input  = split(glob(s:dir.l:subdir.'/*'))
 		else
-			let l:subdir = &ft
-			let l:input  = split(glob(s:dir."/*")) + split(glob(s:dir.l:subdir."/*"))
+			let l:input  = split(glob(s:dir."/*")) + split(glob(s:dir.&ft."/*"))
 		endif
         let l:output = []
         for i in l:input
