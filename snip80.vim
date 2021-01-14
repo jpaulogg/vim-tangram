@@ -34,7 +34,7 @@ vmap <unique> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va<<C-g>
 vmap <unique> <C-s>d <C-c>`<2xm`f>h2xhv``<C-g>
 
 " expand simple expression inside tags (like '<{strftime('%c')}>', for example)
-smap <unique> <C-s>e <C-s><C-d><C-g>"sc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
+smap <unique> <C-s>e <C-s>d<C-g>"sc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
 
 " functions {{{1
 function s:Insert() abort
