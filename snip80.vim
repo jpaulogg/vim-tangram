@@ -1,44 +1,46 @@
-" snip80.vim - <https://github.com/jpaulogg/vim-snip80.git>
+" snip120.vim - <https://github.com/jpaulogg/vim-snip120.git>
 
 " Author:  João Paulo G. Garcia
 " Licence: public domain
 " Last Change: 2021/01/13  
 
-" Snippets with only 80 lines of code!
-" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next)
-" and CTRL-S_P (previous). Other functionalities in 'mappings' section.
+" Snippets with only 120 lines of vimscript!
+"
+" Insert snippets with CTRL-S_I. Move through tags with CTRL-S_N (next)  and
+" CTRL-S_P (previous). For faster movement in SELECT mode you can keep  CTRL
+" pressed and then move with 'sn' or 'sp'. Check the comments below for more
+" info's and functionalities.
 
-" load once
-if exists('g:loaded_snip80')
+if exists('g:loaded_snip120')
 	finish
 endif
-let g:loaded_snip80 = 1
+let g:loaded_snip120 = 1
 
-" you can change both snippets directory path and tags delimiter below.
-" (delimiter must end with an unique '>')
+" you can change both snippets directory path and tags delimiters below.
+" (delimiters must start with unique '<' and end with unique '>')
 let s:dir   = "~/.config/nvim/snippets/"
-let s:delim = '}>'
+let s:start = '<{'            " ex: let s:start = '<-:'
+let s:end   = '}>'            "     let s:end   = ':->'
 
 " INSERT SNIPPET
 " mappings {{{1
-imap <unique><silent> <C-s>i <C-c>:call   <SID>Insert()<CR>
+imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through tags
 imap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
-imap <unique><silent> <C-s><C-n> <C-c>:call  <SID>Search('z')<CR>
 smap <unique><silent> <C-s>n     <C-c>:call  <SID>Search('z')<CR>
 smap <unique><silent> <C-s><C-n> <C-c>:call  <SID>Search('z')<CR>
 imap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
-imap <unique><silent> <C-s><C-p> <C-c>h:call <SID>Search('b')<CR>
 smap <unique><silent> <C-s>p     <C-c>h:call <SID>Search('b')<CR>
 smap <unique><silent> <C-s><C-p> <C-c>h:call <SID>Search('b')<CR>
 
-" add/delete delimiters '<{}>' to/from selection
-vmap <unique> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va<<C-g>
-vmap <unique> <C-s>d <C-c>`<2xm`f>h2xhv``<C-g>
+" add/delete delimiters (defaults are '<{' and '}>') to/from selection
+vmap <unique> <C-s>a <C-c>:call <SID>AddSurround()<CR>
+vmap <unique> <C-s>d <C-c>:call <SID>DelSurround()<CR>
 
 " expand simple expression inside tags (like '<{strftime('%c')}>', for example)
-smap <unique> <C-s>e <C-s>d<C-g>"sc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
+" overrides unnamed register
+smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
 " functions {{{1
 function s:Insert() abort
@@ -55,12 +57,29 @@ function s:Insert() abort
 endfunction
 
 function s:Search(flags) abort
-    let l:tag = search(s:delim, a:flags)
-	if l:tag > 0
+    let l:tag = search(s:end, a:flags)
+	if l:tag
 		exec "normal va<\<C-g>"    
 	endif
 endfunction
 
+function s:AddSurround()
+	call cursor(line("'>"), col("'>"))
+	exec 'normal a'.s:end
+	call cursor(line("'<"), col("'<"))
+	exec 'normal i'.s:start
+	exec "normal va>\<C-g>"
+endfunction
+
+function s:DelSurround()
+	call search(s:start, 'bc')
+	exec 'normal '.len(s:start).'x'
+	let l = line('.')
+	let c = col('.')
+	call search(s:end, 'z')
+	exec 'normal '.len(s:end).'xh'
+	exec 'normal v'.l.'G'.c."|\<C-g>"
+endfunction
 " }}}1
 
 " COMPLETE SNIPPETS NAMES
@@ -68,7 +87,7 @@ set completefunc=SnipComplete    " {{{1
 
 function SnipComplete(findstart, base) abort
     if a:findstart
-        let l:line = getline('.')
+        let l:line  = getline('.')
         let l:start = col('.') - 1
         while l:start > 0 && l:line[start - 1] =~ '\k'
             let l:start -= 1
@@ -96,7 +115,6 @@ function SnipComplete(findstart, base) abort
         return l:output
     endif
 endfunction
-
 " }}}
 
 " vim: set fdm=marker :
