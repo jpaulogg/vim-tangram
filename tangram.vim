@@ -1,30 +1,58 @@
-" snip120.vim - <https://github.com/jpaulogg/vim-snip120.git>
+" tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
 
-" Author:  João Paulo G. Garcia
 " Licence: public domain
 " Last Change: 2021/01/14  
 
-" Snippets with only 120 lines of script!
+" Vim plugin for assemble code snippets, just like solving a tangram puzzle!
 
-" In insert mode <C-x><C-u> completes snippets matching keyword in front of  the
-" cursor; <C-s>i deletes keyword and insert the snippet; <C-s>n and <C-s>p  move
-" through the snippet tags. In select mode, <C-n> and <C-p>  move  through  tags
-" (<C-s>n and <C-s>p still work); <C-s>a adds delimiters to selection and <C-s>d
-" deletes them; <C-s>e expands expressions inside delimiters.
-
-if exists('g:loaded_snip120')
+if exists('g:loaded_tangram')
 	finish
 endif
-let g:loaded_snip120 = 1
+let g:loaded_tangram = 1
 
-" you can change both snippets directory path and tags delimiters below.
-" (delimiters must start with unique '<' and end with unique '>')
-let s:dir   = "~/.config/nvim/snippets/"
-let s:start = '<{'                      " example: let s:start = '<-:'
-let s:end   = '}>'                      "          let s:end   = ':->'
+" USAGE {{{1
+" First create a directory for saving your snippets files.
+" These are the defaults paths for neovim and vim:
+if has('nvim')
+	let s:dir = $HOME."/.config/nvim/snippets/"
+else
+	let s:dir = $HOME.".vim/snippets/"
+endif
 
-" INSERT SNIPPET
-" mappings {{{1
+" You can also define delimiters for snippets tags. They must start with
+" unique '<' and end with unique '>'.   Example:
+let s:start = '<{'                    " let s:start = '<-:'
+let s:end   = '}>'                    " let s:end   = ':->'
+
+" Create snippet files with the '.snip' extension.  Put  them  in  the  defined
+" directory or in sub-directories by file type. When editing a  'r'  file,  you
+" will have access to all snippets in  the  main  directory  and  in  the  'r/'
+" sub-directory. That way, typing 'for' and pressing <C-s>i will first  attempt
+" to insert r/for.snip file in the current line, and if it fails it will try to
+" insert for.snip from  the  main  directory.  Typing  python/for  will  insert
+" for.snip from python sub-directory.
+
+" Snippets tags accept empty, default and expressions values. You can also put
+" tags inside other tags (the plugin will select first the deepest tag).
+
+" Example:
+" pacotes <- c('<{data.table}>', '<{ggplot2}>', '<{...}>')
+"
+" for (p in pacotes) {
+" 	if (!require(p, character.only = TRUE, quietly = TRUE)) {
+" 		install.packages(p)
+" 		library(p, character.only = TRUE)
+" 	}
+" }
+
+" In insert mode <C-x><C-u> completes snippets  keyword ;  <C-s>i  insert  the
+" snippet in the current line; <C-s>n and <C-s>p move through the snippet tags.
+
+" In select mode, move with <C-n> and <C-p> (<C-s>n and <C-s>p still work); add
+" or remove delimiters from current selection with <C-s>a and  <C-s>d;  expands
+" simple expressions inside delimiters (like '<{strftime('%c')}>') with <C-s>e.
+
+" MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through tags
@@ -43,7 +71,7 @@ vmap <unique> <C-s>d <C-c>:call <SID>DelSurround()<CR>
 " overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
-" functions {{{1
+" FUNCTIONS {{{1
 function s:Insert() abort
 	let l:name = getline('.')
 	if !filereadable(s:dir.l:name.'.snip')
@@ -81,10 +109,9 @@ function s:DelSurround()
 	exec 'normal '.len(s:end).'xh'
 	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
-" }}}1
 
-" COMPLETE SNIPPETS NAMES
-set completefunc=SnipComplete    " {{{1
+" COMPLETE FUNCTION {{{1
+set completefunc=SnipComplete
 
 function SnipComplete(findstart, base)
     if a:findstart
@@ -115,6 +142,6 @@ function SnipComplete(findstart, base)
         return l:output
     endif
 endfunction
-" }}}
+" }}}1
 
-" vim: set fdm=marker :
+"  vim: set fdm=marker :
