@@ -4,13 +4,13 @@
 " Licence: public domain
 " Last Change: 2021/01/14  
 
-" Snippets with only 120 lines of vimscript!
+" Snippets with only 120 lines of script!
 
-" In insert mode <C-x><C-u> find snippets matching keyword  in  front  of  the
-" cursor; <C-s>i delete keyword and insert the snippet; <C-s>n and <C-s>p move
-" through the snippet tags. In select mode, <C-n> and <C-p> move through  tags
-" (<C-s>n and <C-s>p still work); <C-s>a and <C-s>d add and delete  delimiters
-" from selection; <C-s>e expand expressions inside delimiters.
+" In insert mode <C-x><C-u> completes snippets matching keyword in front of  the
+" cursor; <C-s>i deletes keyword and insert the snippet; <C-s>n and <C-s>p  move
+" through the snippet tags. In select mode, <C-n> and <C-p>  move  through  tags
+" (<C-s>n and <C-s>p still work); <C-s>a adds delimiters to selection and <C-s>d
+" deletes them; <C-s>e expands expressions inside delimiters.
 
 if exists('g:loaded_snip120')
 	finish
