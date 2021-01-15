@@ -1,0 +1,142 @@
+*tangram.txt*  Code snippets like tangram pieces, minimal and versatile!
+
+
+OPTIONS                                                        *tangram-options*
+
+You can define the path to  snippets  directory with the |g:tangram_dir| variable
+and the placeholder delimiters with the |g:tangram_opening| and |g:tangram_closing|
+variables.
+
+`Example:`
+`let g:tangram_dir = '/home/user-name/.local/share/vim/snippets/'`
+`let g:tangram_opening = '<-:'`
+`let g:tangram_closing = ':->'`
+
+See |tangram-directories| and |tangram-delimiters| below.
+
+DIRECTORIES                                *tangram-directories* *g:tangram_dir*
+
+You must create a main directory to keep yours snippets files. You can  also
+create subdirectories by file type. By default snippets directory is set to
+|$HOME|/.config/nvim/snippets/ in neovim and |$HOME|/.vim/snippets/ in  vim. 
+
+To create the defaults directories from the shell:
+`mkdir ~/.config/nvim/snippets/` in neovim
+`mkdir ~/.vim/snippets/`         in vim
+
+DELIMITERS                 *tangram-delimiters* *g:tangram_opening* *g:tangram_closing*
+
+Defaults: '<{', '{>'
+
+The start and end delimiters of the placeholder string to use. The opening
+delimiter must begin with a single '<' and the closing delimiter must end with a
+single '>', so that commands like |a<| work properly.
+
+Example:
+`let s:open = '<-:'`
+`let s:end  = ':->'`
+
+See the next section to learn how placeholders work.
+
+ADDING SNIPPETS                                             *tangram-add-snippets*
+
+Snippets file must  have .snip extension  and  be  located  at |tangram-directory.|
+Keeping defaults, "~/.config/nvim/snippets/foo.snip" file should be read correctly
+as well as "~/.config/nvim/snippets/python/bar.snip."
+
+Use |tangram-delimiters| to add placeholders to the snippet file. Placeholders
+mark parts of the snippet where you may  want  to  insert  some  text,  keep
+default value or trigger vimscript expression.  See  these  examples  below:
+
+`<{ }>, <{default value}>, <{strftime('%c')}>`
+
+A more realistic example from "~/.config/nvim/snippets/r/packages.snip" :
+
+`packages <- c('<{data.table}>', '<{ggplot2}>', '<{...}>'`
+              `'<{...}>', '<{stringr}>', '<{forcats}>')`
+
+`for (p in packages) {`
+	`if (!require(p, character.only = TRUE, quietly = TRUE)) {`
+		`install.packages(p)`
+		`library(p, character.only = TRUE)`
+	`}`
+`}`
+
+TIP: You can create nested placeholders! Most of the time, first "level"
+placeholders will be slected first by the |tangram-mappings|.
+
+COMPLETION                                                      *tangram-complete*
+
+If empty, the plugin will set the 'completefunc' option. See |i_CTRL-X_CTRL-U.|
+
+In insertion mode, <C-x><C-u> completes keyword snippets in front of the cursor.
+This works  similarly  to  file  name  completion,  so  you  can  also  complete
+subdirectories names.
+
+Let's say that |g:tangram_dir| have the following files and subdirectories:
+
+"fooBar.snip"
+"r/foobar.snip"
+"python/foobar.snip"
+
+If you're editinng a "r" file, after typing  foo  and  pressing  <C-x><C-u>  the
+popupmenu will show "fooBar" and "foobar". The first  is  the  "fooBar.snip"  in
+main directory, and the second is the "foobar.snip" in the "r/" subdirectory. If
+you want to acess python subdirectory all you need  to  do  is  type  "python/"
+first.  That  way,  typing  "python/foo"  and  pressing  <C-x><C-u>  will   show
+"python/foobar" in the popupmenu.
+
+PS: note that complete-function can't distinguish between "snippets/foobar.snip"
+and "snippets/r/foobar.snip
+
+INSERTING SNIPPETS                                                *tangram-insert*
+
+In insert mode, <C-s>i looks in |g:tangram_dir| for a file that matches the keyword
+in front of the cursor. It looks first in the file type subdirectory, if exists
+one. Than searches in the main directory.
+
+Following the last example, 
+
+Create snippet files with the .snip extension. Put them in the tangram-directory
+or in subdirectories by file type. When editing a 'r' file, you will have
+access to all snippets in the main directory and in the 'r/' subdirectory. That
+way, typing foo and pressing <C-s>i will first attempt to insert "r/for.snip"
+file in the current line, and if it fails it will try to insert for.snip from
+the main directory. Typing python/for will insert for.snip from "python"
+subdirectory.
+
+Snippets tags accept empty, default and expressions values. You can also put
+tags inside other tags (the plugin will select first the deepest tag).
+
+Example:
+pacotes <- c('<{data.table}>', '<{ggplot2}>', '<{...}>')
+
+for (p in pacotes) {
+	if (!require(p, character.only = TRUE, quietly = TRUE)) {
+		install.packages(p)
+		library(p, character.only = TRUE)
+	}
+}
+
+
+<{teste `<{this <{is a}> placeholder}>`}>  teste 
+
+MAPPINGS                                                      *tangram-mappings*
+
+CTRL-S i                                                            *i_CTRL-S_I*
+CTRL-S n                                                            *i_CTRL-S_N*
+CTRL-S p                                                            *i_CTRL-S_P*
+CTRL-N or CTRL-S p                                         *s_CTRL-N* *s_CTRL-S_n*
+CTRL-P or CTRL-S n                                         *s_CTRL-P* *s_CTRL-S_p*
+CTRL-S a                                                            *v_CTRL-S_A*
+CTRL-S d                                                            *v_CTRL-S_D*
+CTRL-S e                                                            *v_CTRL-S_E*
+
+In insert mode <C-x><C-u> completes snippets  keyword ;  <C-s>i  insert  the
+snippet in the current line; <C-s>n and <C-s>p move through the snippet tags.
+
+In select mode, move with <C-n> and <C-p> (<C-s>n and <C-s>p still work); add
+or remove delimiters from current selection with <C-s>a and  <C-s>d;  expands
+simple expressions inside delimiters (like '<{strftime('%c')}>') with <C-s>e.
+
+vim: set et ft=help :
