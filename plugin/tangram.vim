@@ -32,7 +32,7 @@ imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
 nmap <silent> <SID>(select_next) :call <SID>Search(g:tangram_open,  'z')<CR>
-nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be' )<CR>
+nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be')<CR>
 
 imap <unique><silent> <C-s>n <C-c><SID>(select_next)
 smap <unique><silent> <C-s>n <C-c><SID>(select_next)

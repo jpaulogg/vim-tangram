@@ -77,12 +77,11 @@ A more realistic example from "~/.config/nvim/snippets/r/packages.snip" :
 	`}`
 `}`
 
-Note that you can create nested placeholders. Most of the time, top level
-placeholders will be selected first by |tangram-mappings|.
+Note that you can create nested placeholders. See |s_CTRL-S_n| |s_CTRL-S_p|.
 
-Use |tangram-delimiters| to add placeholders to the snippet text.  In  visual  and
-select modes, <C-s>a adds delimiters to selected area  and <C-s>d  deletes  them.
-<C-s>e expands vimscript expression within a placeholder.
+Use |tangram-delimiters| to add placeholders  to  the snippet text. In  visual
+and select modes, <C-s>a adds delimiters to selected area and <C-s>d deletes
+them. <C-s>e expands vimscript expression within a placeholder.
 
 You can jump through placeholders with <C-s>n (next) and <C-s>p (previous) in
 insert and select modes. The placeholders text is visually selected and then
@@ -135,23 +134,25 @@ CTRL-S i      Looks in |g:tangram_dir| for a file that matches the keyword
               in front of the cursor and insert it in the current line.
 
                                                          *i_CTRL-S_N*
-CTRL-S n      Visually select next placeholder and starts |Select-mode|
+CTRL-S n      Visually selects next placeholder and starts |Select-mode|.
+              If it is a nested placeholder, selects the outer level.
 
                                                          *i_CTRL-S_P*
-CTRL-S p      Visually select previous placeholder and starts |Select-mode|
+CTRL-S p      Visually selects previous placeholder and starts |Select-mode|.
+              If it is a nested placeholder, selects the outer level.
 
                                                          *s_CTRL-N* *s_CTRL-S_n*
 CTRL-N   or
-CTRL-S n      For faster movement in select mode, keep <CTRL> pressed and then
+CTRL-S n      For faster movement in select mode, hold <CTRL> and then
               press "n". CTRL-S n still works.
                                                          *s_CTRL-P* *s_CTRL-S_p*
 CTRL-N   or
-CTRL-S p      For faster movement in select mode, keep <CTRL> pressed and then
+CTRL-S p      For faster movement in select mode, hold <CTRL> and then
               press "p". CTRL-S p still works.
 
                                                          *v_CTRL-S_A*
 CTRL-S a      Adds placeholders delimiters to selected area.
-              See |g:tangram_open| and |g:tangram_close|
+              See |g:tangram_open| and |g:tangram_close|.
 
                                                          *v_CTRL-S_D*
 CTRL-S d      Deletes placeholders delimiters to selected area. 
