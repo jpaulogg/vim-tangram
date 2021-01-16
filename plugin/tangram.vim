@@ -31,12 +31,15 @@ endif
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-imap <unique><silent> <C-s>n <C-c>:call   <SID>Search(g:tangram_close,'cz')<CR>
-smap <unique><silent> <C-s>n <C-c>:call   <SID>Search(g:tangram_open,  'z')<CR>
-smap <unique><silent> <C-n>  <C-c>:call   <SID>Search(g:tangram_open,  'z')<CR>
-imap <unique><silent> <C-s>p <C-c>:call   <SID>Search(g:tangram_open, 'cb')<CR>
-smap <unique><silent> <C-s>p <C-c>F<:call <SID>Search(g:tangram_close, 'b')<CR>
-smap <unique><silent> <C-p>  <C-c>F<:call <SID>Search(g:tangram_close, 'b')<CR>
+nmap <silent> <SID>(select_next) :call <SID>Search(g:tangram_open,  'z')<CR>
+nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be' )<CR>
+
+imap <unique><silent> <C-s>n <C-c><SID>(select_next)
+smap <unique><silent> <C-s>n <C-c><SID>(select_next)
+smap <unique><silent> <C-n>  <C-c><SID>(select_next)
+imap <unique><silent> <C-s>p <C-c><SID>(select_prev)
+smap <unique><silent> <C-s>p <C-c><SID>(select_prev)
+smap <unique><silent> <C-p>  <C-c><SID>(select_prev)
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
@@ -51,25 +54,27 @@ smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 " FUNCTIONS {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
-	let l:subdir = &ft.'/'
+	let l:subdir = &ft.'/'             " try to insert from file type subdirectory first
 	let l:file = g:tangram_dir.l:subdir.l:keyword.'.snip'
-	if !filereadable(l:file)                     " try to insert from file type subdirectory first
+	if !filereadable(l:file)
 		let l:file = g:tangram_dir.l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
 	call cursor(line("'."), 1)
-	call s:Search(g:tangram_open, 'c')        " should find nested placeholders
+	call s:Search(g:tangram_open, 'c')
 endfunction
 
 function s:Search(pattern, flags) abort
-	if search(a:pattern, a:flags)                " placeholders must be inside '<' and '>'
+	if mode() ==? 's' && a:flags == 'be'
+		call cursor(line("'<"), col("'<"))
+	endif
+	if search(a:pattern, a:flags)
 		exec "normal va<\<C-g>"    
 	endif
 endfunction
 
 function s:Surround()
-	call cursor(line("'>"), col("'>"))
 	exec 'normal a'.g:tangram_close
 	call cursor(line("'<"), col("'<"))
 	exec 'normal i'.g:tangram_open
@@ -77,12 +82,13 @@ function s:Surround()
 endfunction
 
 function s:Dsurround()
-	call cursor(line("'>"), col("'>"))
-	exec 'normal l'.len(g:tangram_open).'dhh'
+	let l:len = len(g:tangram_open)
+	call cursor(line('.'), col("'>") - l:len + 1)
+	normal df>h
 	let l = line('.')
-	let c = col('.') - len(g:tangram_open)
+	let c = col('.') - l:len
 	call cursor(line("'<"), col("'<"))
-	exec 'normal '.len(g:tangram_close).'x'
+	exec 'normal '.l:len.'x'
 	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
 
