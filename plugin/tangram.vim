@@ -3,7 +3,7 @@
 " Licence: public domain
 " Last Change: 2021/01/14  
 
-" Code snippets like tangram pieces, minimal and versatile!
+" A snippet plugin as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish

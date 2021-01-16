@@ -1,16 +1,32 @@
-*tangram.txt*  Code snippets like tangram pieces, minimal and versatile!
+*tangram.txt* snippets plugin as minimal as a tangram puzzle!
 
+                 ________
+                │╲      ╱│
+                │ ╲    ╱ │
+                │  ╲  ╱╲ │
+                │   ╲╱  ╲│
+                │   ╱╲  ╱│
+                │  ╱  ╲╱ │
+                │ ╱‾‾‾╱  │
+                │╱   ╱   │
+                 ‾‾‾‾‾‾‾‾‾
 
+1. Options                    |tangram-options|
+2. Creating Snippets          |tangram-snippets|
+3. Insert Snippets            |tangram-insert|
+4. Mappings                   |tangram-mappings|
+
+==============================================================================
 OPTIONS                                                        *tangram-options*
 
 You can define the path to  snippets  directory with the |g:tangram_dir| variable
-and the placeholder delimiters with the |g:tangram_opening| and |g:tangram_closing|
+and the placeholder delimiters with the |g:tangram_open| and |g:tangram_close|
 variables. Example:
 
 `let g:tangram_dir = '/home/user-name/.local/share/vim/snippets/'`
-`let g:tangram_opening = '<-:'`
-`let g:tangram_closing = ':->'`
-                                           *tangram-directories* *g:tangram_dir*
+`let g:tangram_open = '<-:'`
+`let g:tangram_close = ':->'`
+                                             *tangram-directories* *g:tangram_dir*
 You must create a main directory to keep your snippets files. You can  also
 create subdirectories by file type. By default snippets directory is set to
 |$HOME|/.config/nvim/snippets/  in  neovim  and |$HOME|/.vim/snippets/ in  vim. 
@@ -19,30 +35,32 @@ To create the defaults directories from the shell:
 `mkdir ~/.config/nvim/snippets/` in neovim
 `mkdir ~/.vim/snippets/`         in vim
 
-                           *tangram-delimiters* *g:tangram_opening* *g:tangram_closing*
+                             *tangram-delimiters* *g:tangram_open* *g:tangram_close*
 Defaults: '<{', '{>'
 
-The start and end delimiters of the placeholder string to use. The opening
-delimiter must begin with a single '<' and the closing delimiter must end with a
-single '>', so that commands like |a<| work properly. Example:
+The start and end delimiters of the placeholder string  to  use.  The  opening
+delimiter must begin with a single '<' and the closing delimiter must end with
+a single '>', so that commands like |a<| work properly. Example:
 
 `let s:open = '<-:'`
 `let s:end  = ':->'`
 
 See the next section to learn how placeholders work.
 
-CREATING SNIPPETS                                                *tangram-snippets*
+==============================================================================
+CREATING SNIPPETS                                             *tangram-snippets*
 
-Snippets files must be placed in the |tangram-directories|  and  must end with '.snip'
-extension. For example, "~/.config/nvim/snippets/foo.snip". It is recommended that
-the first letter of main directory snippets be capitalized, like "Foobar.snip".
+Snippets files must be placed  in the |tangram-directories| and must end with
+'.snip'  extension.  For example, "~/.config/nvim/snippets/foo.snip". It is
+recommended that the first letter of main directory snippets be capitalized,
+like "Foobar.snip".
 
-You can also put your snippets in subdirectories within the |tangram-directories|, like
-"python/" and "r/"
+You can also place your snippets in subdirectories within the the main
+directory. For example, "~/.config/nvim/snippets/python/foo.snip".
 
-                                                              *tangram-placeholders*
-Placeholders marks places of  the  snippet  where you may  want to  insert  some
-text,  keep default value or trigger vimscript expression.  See  these  examples
+                                                          *tangram-placeholders*
+Placeholders  marks parts of the snippet where you may want to insert some
+text, keep default value or trigger vimscript expression. See the examples
 below:
 
 `<{ }>, <{default value}>, <{strftime('%c')}>`
@@ -62,51 +80,54 @@ A more realistic example from "~/.config/nvim/snippets/r/packages.snip" :
 Note that you can create nested placeholders. Most of the time, top level
 placeholders will be selected first by |tangram-mappings|.
 
-Use |tangram-delimiters| to add placeholders to the snippet file.  In  visual  and
+Use |tangram-delimiters| to add placeholders to the snippet text.  In  visual  and
 select modes, <C-s>a adds delimiters to selected area  and <C-s>d  deletes  them.
-<C-s>e will expand expression within a placeholder.
+<C-s>e expands vimscript expression within a placeholder.
 
 You can jump through placeholders with <C-s>n (next) and <C-s>p (previous) in
 insert and select modes. The placeholders text is visually selected and then
 |Select-mode| is started. 
 
-INSERTING SNIPPETS                                                *tangram-insert*
+=============================================================================
+INSERTING SNIPPETS                                              *tangram-insert*
 
-In insert mode, <C-s>i looks in |g:tangram_dir| for a file that matches the keyword
-in front  of  the cursor. It looks first in the file type subdirectory, if exists
-one. Than searches in the main directory.
+In insert mode, <C-s>i  looks in |g:tangram_dir|  for a file that matches  the
+keyword in front of the cursor. It looks first in the file type subdirectory
+(if there is one) and than searches in the main directory.
 
 In different types of files we can access snippets with different keywords.
 Let's say that |g:tangram_dir| have the following files and subdirectories:
 
-{subdir}file        file type / keyword~
+{subdir/}file       file type / keyword~
                              -               r           python
 "foobar.snip"             foobar             -              -
 "r/foobar.snip"           r/foobar         foobar        r/foobar
-"python/foobar.snip"      python/foobar    python/for    foobar
+"python/foobar.snip"      python/foobar    python/foobar foobar
 
-NOTE: It is recommended to rename the file in the main directory to "Foobar.snip".
+NOTE: It is recommended to rename the  file  in  the  main  directory to
+"Foobar.snip". That way, keyword in all types of files would be "Foobar".
 
-                                             *tangram-complete* *TangramCoplete()*
+                                           *tangram-complete* *TangramCoplete()*
 If the 'completefunc' option is empty, it will be set to `TangramComplete()`.
 See |i_CTRL-X_CTRL-U|.
 
-In insertion mode, <C-x><C-u> completes keyword snippets in front of the cursor.
-This works  similarly  to  file  name completion,  so  you  can  also  complete
+In insertion mode, <C-x><C-u> completes  keyword  snippets  in  front  of  the
+cursor. This works similarly to file name completion, so you can also complete
 subdirectories names. See |i_CTRL-X_CTRL-F|.
 
 Following the last example, we have:
-subdirectory     file name      no file-type     python ~
+{subdir/}file        file type / typing ~
+                             -               r           python
+"Foobar.snip"             Foo...           Foo...        Foo...
+"r/foobar.snip"           r/foo...         foo...        r/foo...
+"python/foobar.snip"      python/foo...    python/foo... foo...
 
-      -          foobar.snip       foo...         foo...
-      r          foobar.snip       r/foo...       r/foo...
-    python       foobar.snip       python/foo...  foo...
+While editing  python  files  <C-x><C-u>  searches  for  files  inside  python
+subdirectory without having to type "python/" first. Completion also  searches
+for subdirectories names and then show the files within it. So typing "r" will
+show "r/" and then typing "foo" will show "r/foobar".
 
-While  editing  python  files  <C-x><C-u>  searches  for   files   inside   python
-subdirectory without having to type "python/" first. Completion also searches  for
-subdirectories  names and  then show the files within it.  So typing "r" will show
-"r/" and then typing "foo" will show "r/foobar".
-
+==============================================================================
 MAPPINGS                                                      *tangram-mappings*
 
                                                          *i_CTRL-S_I*
@@ -130,7 +151,7 @@ CTRL-S p      For faster movement in select mode, keep <CTRL> pressed and then
 
                                                          *v_CTRL-S_A*
 CTRL-S a      Adds placeholders delimiters to selected area.
-              See |g:tangram_opening| and |g:tangram_closing|
+              See |g:tangram_open| and |g:tangram_close|
 
                                                          *v_CTRL-S_D*
 CTRL-S d      Deletes placeholders delimiters to selected area. 
