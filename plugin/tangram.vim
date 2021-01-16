@@ -3,7 +3,7 @@
 " Licence: public domain
 " Last Change: 2021/01/14  
 
-" A snippet plugin as minimal as a tangram puzzle!
+" Snippet plugin written ins Vimscript. As minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -88,7 +88,7 @@ endfunction
 
 " COMPLETE FUNCTION {{{1
 if &completefunc == ''
-	set completefunc=TangramComplete()
+	set completefunc=TangramComplete
 endif
 
 function TangramComplete(findstart, base)
