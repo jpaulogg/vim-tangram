@@ -5,55 +5,52 @@ OPTIONS                                                        *tangram-options*
 
 You can define the path to  snippets  directory with the |g:tangram_dir| variable
 and the placeholder delimiters with the |g:tangram_opening| and |g:tangram_closing|
-variables.
+variables. Example:
 
-`Example:`
 `let g:tangram_dir = '/home/user-name/.local/share/vim/snippets/'`
 `let g:tangram_opening = '<-:'`
 `let g:tangram_closing = ':->'`
-
-See |tangram-directories| and |tangram-delimiters| below.
-
-DIRECTORIES                                *tangram-directories* *g:tangram_dir*
-
-You must create a main directory to keep yours snippets files. You can  also
+                                           *tangram-directories* *g:tangram_dir*
+You must create a main directory to keep your snippets files. You can  also
 create subdirectories by file type. By default snippets directory is set to
-|$HOME|/.config/nvim/snippets/ in neovim and |$HOME|/.vim/snippets/ in  vim. 
-
+|$HOME|/.config/nvim/snippets/  in  neovim  and |$HOME|/.vim/snippets/ in  vim. 
 To create the defaults directories from the shell:
+
 `mkdir ~/.config/nvim/snippets/` in neovim
 `mkdir ~/.vim/snippets/`         in vim
 
-DELIMITERS                 *tangram-delimiters* *g:tangram_opening* *g:tangram_closing*
-
+                           *tangram-delimiters* *g:tangram_opening* *g:tangram_closing*
 Defaults: '<{', '{>'
 
 The start and end delimiters of the placeholder string to use. The opening
 delimiter must begin with a single '<' and the closing delimiter must end with a
-single '>', so that commands like |a<| work properly.
+single '>', so that commands like |a<| work properly. Example:
 
-Example:
 `let s:open = '<-:'`
 `let s:end  = ':->'`
 
 See the next section to learn how placeholders work.
 
-ADDING SNIPPETS                                             *tangram-add-snippets*
+CREATING SNIPPETS                                                *tangram-snippets*
 
-Snippets file must  have .snip extension  and  be  located  at |tangram-directory.|
-Keeping defaults, "~/.config/nvim/snippets/foo.snip" file should be read correctly
-as well as "~/.config/nvim/snippets/python/bar.snip."
+Snippets files must be placed in the |tangram-directories|  and  must end with '.snip'
+extension. For example, "~/.config/nvim/snippets/foo.snip". It is recommended that
+the first letter of main directory snippets be capitalized, like "Foobar.snip".
 
-Use |tangram-delimiters| to add placeholders to the snippet file. Placeholders
-mark parts of the snippet where you may  want  to  insert  some  text,  keep
-default value or trigger vimscript expression.  See  these  examples  below:
+You can also put your snippets in subdirectories within the |tangram-directories|, like
+"python/" and "r/"
+
+                                                              *tangram-placeholders*
+Placeholders marks places of  the  snippet  where you may  want to  insert  some
+text,  keep default value or trigger vimscript expression.  See  these  examples
+below:
 
 `<{ }>, <{default value}>, <{strftime('%c')}>`
 
 A more realistic example from "~/.config/nvim/snippets/r/packages.snip" :
 
-`packages <- c('<{data.table}>', '<{ggplot2}>', '<{...}>'`
-              `'<{...}>', '<{stringr}>', '<{forcats}>')`
+`packages <- c('<{data.table}>', '<{stringr}>', '<{forcats}>'<{ }>`
+              `<{'<{dplyr}>', '<{ggplot2}>', '<{ }>')}>`
 
 `for (p in packages) {`
 	`if (!require(p, character.only = TRUE, quietly = TRUE)) {`
@@ -62,81 +59,84 @@ A more realistic example from "~/.config/nvim/snippets/r/packages.snip" :
 	`}`
 `}`
 
-TIP: You can create nested placeholders! Most of the time, first "level"
-placeholders will be slected first by the |tangram-mappings|.
+Note that you can create nested placeholders. Most of the time, top level
+placeholders will be selected first by |tangram-mappings|.
 
-COMPLETION                                                      *tangram-complete*
+Use |tangram-delimiters| to add placeholders to the snippet file.  In  visual  and
+select modes, <C-s>a adds delimiters to selected area  and <C-s>d  deletes  them.
+<C-s>e will expand expression within a placeholder.
 
-If empty, the plugin will set the 'completefunc' option. See |i_CTRL-X_CTRL-U.|
-
-In insertion mode, <C-x><C-u> completes keyword snippets in front of the cursor.
-This works  similarly  to  file  name  completion,  so  you  can  also  complete
-subdirectories names.
-
-Let's say that |g:tangram_dir| have the following files and subdirectories:
-
-"fooBar.snip"
-"r/foobar.snip"
-"python/foobar.snip"
-
-If you're editinng a "r" file, after typing  foo  and  pressing  <C-x><C-u>  the
-popupmenu will show "fooBar" and "foobar". The first  is  the  "fooBar.snip"  in
-main directory, and the second is the "foobar.snip" in the "r/" subdirectory. If
-you want to acess python subdirectory all you need  to  do  is  type  "python/"
-first.  That  way,  typing  "python/foo"  and  pressing  <C-x><C-u>  will   show
-"python/foobar" in the popupmenu.
-
-PS: note that complete-function can't distinguish between "snippets/foobar.snip"
-and "snippets/r/foobar.snip
+You can jump through placeholders with <C-s>n (next) and <C-s>p (previous) in
+insert and select modes. The placeholders text is visually selected and then
+|Select-mode| is started. 
 
 INSERTING SNIPPETS                                                *tangram-insert*
 
 In insert mode, <C-s>i looks in |g:tangram_dir| for a file that matches the keyword
-in front of the cursor. It looks first in the file type subdirectory, if exists
+in front  of  the cursor. It looks first in the file type subdirectory, if exists
 one. Than searches in the main directory.
 
-Following the last example, 
+In different types of files we can access snippets with different keywords.
+Let's say that |g:tangram_dir| have the following files and subdirectories:
 
-Create snippet files with the .snip extension. Put them in the tangram-directory
-or in subdirectories by file type. When editing a 'r' file, you will have
-access to all snippets in the main directory and in the 'r/' subdirectory. That
-way, typing foo and pressing <C-s>i will first attempt to insert "r/for.snip"
-file in the current line, and if it fails it will try to insert for.snip from
-the main directory. Typing python/for will insert for.snip from "python"
-subdirectory.
+{subdir}file        file type / keyword~
+                             -               r           python
+"foobar.snip"             foobar             -              -
+"r/foobar.snip"           r/foobar         foobar        r/foobar
+"python/foobar.snip"      python/foobar    python/for    foobar
 
-Snippets tags accept empty, default and expressions values. You can also put
-tags inside other tags (the plugin will select first the deepest tag).
+NOTE: It is recommended to rename the file in the main directory to "Foobar.snip".
 
-Example:
-pacotes <- c('<{data.table}>', '<{ggplot2}>', '<{...}>')
+                                             *tangram-complete* *TangramCoplete()*
+If the 'completefunc' option is empty, it will be set to `TangramComplete()`.
+See |i_CTRL-X_CTRL-U|.
 
-for (p in pacotes) {
-	if (!require(p, character.only = TRUE, quietly = TRUE)) {
-		install.packages(p)
-		library(p, character.only = TRUE)
-	}
-}
+In insertion mode, <C-x><C-u> completes keyword snippets in front of the cursor.
+This works  similarly  to  file  name completion,  so  you  can  also  complete
+subdirectories names. See |i_CTRL-X_CTRL-F|.
 
+Following the last example, we have:
+subdirectory     file name      no file-type     python ~
 
-<{teste `<{this <{is a}> placeholder}>`}>  teste 
+      -          foobar.snip       foo...         foo...
+      r          foobar.snip       r/foo...       r/foo...
+    python       foobar.snip       python/foo...  foo...
+
+While  editing  python  files  <C-x><C-u>  searches  for   files   inside   python
+subdirectory without having to type "python/" first. Completion also searches  for
+subdirectories  names and  then show the files within it.  So typing "r" will show
+"r/" and then typing "foo" will show "r/foobar".
 
 MAPPINGS                                                      *tangram-mappings*
 
-CTRL-S i                                                            *i_CTRL-S_I*
-CTRL-S n                                                            *i_CTRL-S_N*
-CTRL-S p                                                            *i_CTRL-S_P*
-CTRL-N or CTRL-S p                                         *s_CTRL-N* *s_CTRL-S_n*
-CTRL-P or CTRL-S n                                         *s_CTRL-P* *s_CTRL-S_p*
-CTRL-S a                                                            *v_CTRL-S_A*
-CTRL-S d                                                            *v_CTRL-S_D*
-CTRL-S e                                                            *v_CTRL-S_E*
+                                                         *i_CTRL-S_I*
+CTRL-S i      Looks in |g:tangram_dir| for a file that matches the keyword
+              in front of the cursor and insert it in the current line.
 
-In insert mode <C-x><C-u> completes snippets  keyword ;  <C-s>i  insert  the
-snippet in the current line; <C-s>n and <C-s>p move through the snippet tags.
+                                                         *i_CTRL-S_N*
+CTRL-S n      Visually select next placeholder and starts |Select-mode|
 
-In select mode, move with <C-n> and <C-p> (<C-s>n and <C-s>p still work); add
-or remove delimiters from current selection with <C-s>a and  <C-s>d;  expands
-simple expressions inside delimiters (like '<{strftime('%c')}>') with <C-s>e.
+                                                         *i_CTRL-S_P*
+CTRL-S p      Visually select previous placeholder and starts |Select-mode|
+
+                                                         *s_CTRL-N* *s_CTRL-S_n*
+CTRL-N   or
+CTRL-S n      For faster movement in select mode, keep <CTRL> pressed and then
+              press "n". CTRL-S n still works.
+                                                         *s_CTRL-P* *s_CTRL-S_p*
+CTRL-N   or
+CTRL-S p      For faster movement in select mode, keep <CTRL> pressed and then
+              press "p". CTRL-S p still works.
+
+                                                         *v_CTRL-S_A*
+CTRL-S a      Adds placeholders delimiters to selected area.
+              See |g:tangram_opening| and |g:tangram_closing|
+
+                                                         *v_CTRL-S_D*
+CTRL-S d      Deletes placeholders delimiters to selected area. 
+
+                                                         *v_CTRL-S_E*
+CTRL-S e      Expands expressions within selecteed placeholder.
+              See |tangram-placeholders|.
 
 vim: set et ft=help :
