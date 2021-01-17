@@ -116,7 +116,7 @@ function TangramComplete(findstart, base)
 				let l:item = fnamemodify(i, ":t:r")
 			endif
 			if l:item =~ a:base
-				call add(l:output, {'word': l:item, 'menu': '[snippet]' })
+				call add(l:output, {'word': l:item, 'menu': '[tangram]' })
 			endif
 		endfor
 		return l:output
