@@ -3,7 +3,7 @@
 " Licence: public domain
 " Last Change: 2021/01/14  
 
-" Snippet plugin written ins Vimscript. As minimal as a tangram puzzle!
+" Snippet plugin as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -18,9 +18,13 @@ else
 	let g:tangram_dir = $HOME.".vim/snippets/"
 endif
 
+if g:tangram_dir !~ '/$'
+	let g:tangram_dir .= '/'
+endif
+
 " You can also define delimiters for snippets place holders. They must start with
-" single '<' and end with single '>'. Example:  let g:tangram_open = '<-:'
-if !exists('g:tangram_open')               " let g:tangram_close = ':->'
+" single '<' and end with single '>'. Example:  let g:tangram_open  = '<-:'
+if !exists('g:tangram_open')                  " let g:tangram_close = ':->'
 	let g:tangram_open = '<{'
 endif
 if !exists('g:tangram_close')
@@ -34,19 +38,19 @@ imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 nmap <silent> <SID>(select_next) :call <SID>Search(g:tangram_open,  'z')<CR>
 nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be')<CR>
 
-imap <unique><silent> <C-s>n <C-c><SID>(select_next)
-smap <unique><silent> <C-s>n <C-c><SID>(select_next)
-smap <unique><silent> <C-n>  <C-c><SID>(select_next)
-imap <unique><silent> <C-s>p <C-c><SID>(select_prev)
-smap <unique><silent> <C-s>p <C-c><SID>(select_prev)
-smap <unique><silent> <C-p>  <C-c><SID>(select_prev)
+imap <unique> <C-s>n <C-c><SID>(select_next)
+smap <unique> <C-s>n <C-c><SID>(select_next)
+smap <unique> <C-n>  <C-c><SID>(select_next)
+imap <unique> <C-s>p <C-c><SID>(select_prev)
+smap <unique> <C-s>p <C-c><SID>(select_prev)
+smap <unique> <C-p>  <C-c><SID>(select_prev)
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
-vmap <unique> <C-s>a <C-c>:call <SID>Surround()<CR>
-vmap <unique> <C-s>d <C-c>:call <SID>Dsurround()<CR>
+vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
+vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
 
-" expand simple expression inside place holders (like '<{strftime('%c')}>')
+" expand simple expression within place holders - like '<{strftime('%c')}>'
 " depends on <C-s>d mapping.
 " overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
@@ -54,9 +58,9 @@ smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 " FUNCTIONS {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
-	let l:subdir = &ft.'/'             " try to insert from file type subdirectory first
-	let l:file = g:tangram_dir.l:subdir.l:keyword.'.snip'
-	if !filereadable(l:file)
+	let l:subdir = &ft.'/'                                 " file type subdir
+	let l:file = g:tangram_dir.l:subdir.l:keyword.'.snip'  " try subdir first
+	if !filereadable(l:file)                               " otherwise, try main dir
 		let l:file = g:tangram_dir.l:keyword.'.snip'
 	endif
 	delete _
@@ -65,10 +69,7 @@ function s:Insert() abort
 	call s:Search(g:tangram_open, 'c')
 endfunction
 
-function s:Search(pattern, flags) abort
-	if mode() ==? 's' && a:flags == 'be'
-		call cursor(line("'<"), col("'<"))
-	endif
+function s:Search(pattern, flags)
 	if search(a:pattern, a:flags)
 		exec "normal va<\<C-g>"    
 	endif
@@ -82,13 +83,13 @@ function s:Surround()
 endfunction
 
 function s:Dsurround()
-	let l:len = len(g:tangram_open)
-	call cursor(line('.'), col("'>") - l:len + 1)
-	normal df>h
-	let l = line('.')
-	let c = col('.') - l:len
+	let l:length = len(g:tangram_open)
+	call cursor(line('.'), col('.') - l:length + 1)
+	exec 'normal '.l:length.'x'
 	call cursor(line("'<"), col("'<"))
-	exec 'normal '.l:len.'x'
+	exec 'normal '.l:length.'x'
+	let l = line("'>")                    " storing line for the 'G' command
+	let c = col("'>") - 2 * l:length      " storing columns for the '|' command
 	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
 
@@ -106,18 +107,21 @@ function TangramComplete(findstart, base)
 		endwhile
 		return l:start
 	else
-		if getline('.') =~ '/'          " complete subdirectories names like file completion
+        " complete subdirectories names like file completion
+		if getline('.') =~ '/'
 			let l:subdir = matchstr(getline('.'), "\\a\\+")
 			let l:input  = split(glob(g:tangram_dir.l:subdir.'/*'))
 		else
-			let l:input  = split(glob(g:tangram_dir."/*")) + split(glob(g:tangram_dir.&ft."/*"))
+			let l:subdir = &ft.'/'
+			let l:input  = split(glob(g:tangram_dir."*")) +
+			             \ split(glob(g:tangram_dir.l:subdir."*"))
 		endif
 		let l:output = []
 		for i in l:input
 			if isdirectory(i)
-	let l:item = fnamemodify(i, ":t").'/'
+				let l:item = fnamemodify(i, ":t").'/'
 			else
-	let l:item = fnamemodify(i, ":t:r")
+				let l:item = fnamemodify(i, ":t:r")
 			endif
 			if l:item =~ a:base
 				call add(l:output, {'word': l:item, 'menu': '[snippet]' })
@@ -128,4 +132,4 @@ function TangramComplete(findstart, base)
 endfunction
 " }}}1
 
-"  vim: set fdm=marker :
+"  vim: set noet fdm=marker :
