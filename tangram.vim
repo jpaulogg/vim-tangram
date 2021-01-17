@@ -14,8 +14,8 @@ let g:loaded_tangram = 1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call s:Search('<{', 'z')<CR>
-nmap <silent> <SID>(select_prev) :call s:Search('}>', 'be')<CR>
+nmap <silent> <SID>(select_next) :call <SID>Search('<{', 'z')<CR>
+nmap <silent> <SID>(select_prev) :call <SID>Search('}>', 'be')<CR>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-s>n <C-c><SID>(select_next)
@@ -26,8 +26,8 @@ smap <unique> <C-p>  <C-c><SID>(select_prev)
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
-vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
-vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
+vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
+vmap <unique><silent> <C-s>d <C-c>h2x`<2xv`>4h<C-g>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 " depends on <C-s>d mapping.
@@ -53,23 +53,6 @@ function s:Search(pattern, flags)
 	if search(a:pattern, a:flags)
 		exec "normal va<\<C-g>"    
 	endif
-endfunction
-
-function s:Surround()
-	normal a}>
-	call cursor(line("'<"), col("'<"))
-	normal i<{
-	exec "normal va>\<C-g>"
-endfunction
-
-function s:Dsurround()
-	call cursor(line('.'), col('.') - 1)
-	normal 2x
-	call cursor(line("'<"), col("'<"))
-	normal 2x
-	let l = line("'>")                     " storing line for the 'G' command
-	let c = col("'>") - 4                  " storing columns for the '|' command
-	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
