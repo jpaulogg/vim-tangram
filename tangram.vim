@@ -27,7 +27,7 @@ imap <unique> <C-s>p <C-c><SID>(select_prev)
 smap <unique> <C-s>p <C-c><SID>(select_prev)
 smap <unique> <C-p>  <C-c><SID>(select_prev)
 
-" add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
+" add/delete '<{' and '}>' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
 vmap <unique><silent> <C-s>d <C-c>h2x`<2xv`>4h<C-g>
@@ -53,9 +53,7 @@ function s:Insert() abort
 endfunction
 
 " COMPLETE FUNCTION {{{1
-if &completefunc == ''
-	set completefunc=TangramComplete
-endif
+set completefunc=TangramComplete
 
 function TangramComplete(findstart, base)
 	if a:findstart
