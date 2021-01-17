@@ -10,12 +10,15 @@ if exists('g:loaded_tangram')
 endif
 let g:loaded_tangram = 1
 
+" OPTION - snippets main directory
+let s:dir = $HOME.'.config/nvim/snippets/'
+
 " MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call <SID>Search('<{', 'z')<CR>
-nmap <silent> <SID>(select_prev) :call <SID>Search('}>', 'be')<CR>
+nmap <silent> <SID>(select_next) <Cmd>call search('<{',  'z')<CR>va><C-g>
+nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'be')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-s>n <C-c><SID>(select_next)
@@ -37,22 +40,16 @@ smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 " FUNCTIONS {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
-	let l:dir = stdpath("config").'/snippets/'
 	let l:subdir = &ft.'/'                         " file type subdir
-	let l:file = l:dir.l:subdir.l:keyword.'.snip'  " try subdir first
+	let l:file = s:dir.l:subdir.l:keyword.'.snip'  " try subdir first
 	if !filereadable(l:file)                       " otherwise, try main dir
-		let l:file = l:dir.l:keyword.'.snip'
+		let l:file = s:dir.l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
 	call cursor(line("'."), 1)
-	call s:Search('<{', 'c')
-endfunction
-
-function s:Search(pattern, flags)
-	if search(a:pattern, a:flags)
-		exec "normal va<\<C-g>"    
-	endif
+	call search('<{', 'c')
+	exec "normal va<\<C-g>"    
 endfunction
 
 " COMPLETE FUNCTION {{{1
@@ -70,14 +67,14 @@ function TangramComplete(findstart, base)
 		return l:start
 	else
         " complete subdirectories names like file completion
-		let l:dir = stdpath("config").'/snippets/'
+		let s:dir = stdpath("config").'/snippets/'
 		if getline('.') =~ '/'
 			let l:subdir = matchstr(getline('.'), "\\a\\+")
-			let l:input  = split(glob(l:dir.l:subdir.'/*'))
+			let l:input  = split(glob(s:dir.l:subdir.'/*'))
 		else
 			let l:subdir = &ft.'/'
-			let l:input  = split(glob(l:dir."*")) +
-			             \ split(glob(l:dir.l:subdir."*"))
+			let l:input  = split(glob(s:dir."*")) +
+			             \ split(glob(s:dir.l:subdir."*"))
 		endif
 		let l:output = []
 		for i in l:input
