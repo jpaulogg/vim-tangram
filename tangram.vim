@@ -14,8 +14,8 @@ let g:loaded_tangram = 1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call <SID>Search('<{', 'z')<CR>
-nmap <silent> <SID>(select_prev) :call <SID>Search('}>', 'be')<CR>
+nmap <silent> <SID>(select_next) :call s:Search('<{', 'z')<CR>
+nmap <silent> <SID>(select_prev) :call s:Search('}>', 'be')<CR>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-s>n <C-c><SID>(select_next)
