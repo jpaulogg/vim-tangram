@@ -37,10 +37,11 @@ smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 " FUNCTIONS {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
-	let l:subdir = &ft.'/'                                 " file type subdir
-	let l:file = stdpath("config").l:subdir.l:keyword.'.snip'  " try subdir first
-	if !filereadable(l:file)                               " otherwise, try main dir
-		let l:file = stdpath("config").l:keyword.'.snip'
+	let l:dir = stdpath("config").'/snippets/'
+	let l:subdir = &ft.'/'                         " file type subdir
+	let l:file = l:dir.l:subdir.l:keyword.'.snip'  " try subdir first
+	if !filereadable(l:file)                       " otherwise, try main dir
+		let l:file = l:dir.l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
@@ -86,13 +87,14 @@ function TangramComplete(findstart, base)
 		return l:start
 	else
         " complete subdirectories names like file completion
+		let l:dir = stdpath("config").'/snippets/'
 		if getline('.') =~ '/'
 			let l:subdir = matchstr(getline('.'), "\\a\\+")
-			let l:input  = split(glob(g:tangram_dir.l:subdir.'/*'))
+			let l:input  = split(glob(l:dir.l:subdir.'/*'))
 		else
 			let l:subdir = &ft.'/'
-			let l:input  = split(glob(g:tangram_dir."*")) +
-			             \ split(glob(g:tangram_dir.l:subdir."*"))
+			let l:input  = split(glob(l:dir."*")) +
+			             \ split(glob(l:dir.l:subdir."*"))
 		endif
 		let l:output = []
 		for i in l:input
