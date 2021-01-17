@@ -35,8 +35,8 @@ endif
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call <SID>Search(g:tangram_open,  'z')<CR>
-nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be')<CR>
+nmap <silent> <SID>(select_next) :call search(g:tangram_open,  'z')<CR>va><C-g>
+nmap <silent> <SID>(select_prev) :call search(g:tangram_close, 'be')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-s>n <C-c><SID>(select_next)
@@ -66,33 +66,23 @@ function s:Insert() abort
 	delete _
 	exec '-read '.l:file
 	call cursor(line("'."), 1)
-	call s:Search(g:tangram_open, 'c')
-endfunction
-
-function s:Search(pattern, flags)
-	if search(a:pattern, a:flags)
-		exec "normal va<\<C-g>"    
-	endif
+	call search(g:tangram_open, 'c')
+	exec "normal va>\<C-g>"
 endfunction
 
 function s:Surround()
-	call cursor(line('.'), col("'>"))
-	exec 'normal a'.g:tangram_close
-	call cursor(line("'<"), col("'<"))
-	exec 'normal i'.g:tangram_open
+	exec 'normal `>a'.g:tangram_close
+	exec 'normal `<i'.g:tangram_open
 	exec "normal va>\<C-g>"
 endfunction
 
 function s:Dsurround()
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
-	call cursor(line('.'), col('.') - l:openlen + 1)
-	exec 'normal '.l:closelen.'x'
-	call cursor(line("'<"), col("'<"))
-	exec 'normal '.l:openlen.'x'
-	let l = line("'>")                          " storing line for the 'G' command
-	let c = col("'>") - l:openlen - l:closelen  " storing columns for the '|' command
-	exec 'normal v'.l.'G'.c."|\<C-g>"
+	let c = l:openlen + l:closelen + 1
+	exec 'normal '. (l:closelen - 1) .'h'.l:closelen.'x'
+	exec 'normal `<'.l:openlen.'x'
+	exec "normal v`>".c."hf>\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
