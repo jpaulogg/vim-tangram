@@ -76,6 +76,7 @@ function s:Search(pattern, flags)
 endfunction
 
 function s:Surround()
+	call cursor(line('.'), col("'>"))
 	exec 'normal a'.g:tangram_close
 	call cursor(line("'<"), col("'<"))
 	exec 'normal i'.g:tangram_open
@@ -86,9 +87,9 @@ function s:Dsurround()
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
 	call cursor(line('.'), col('.') - l:openlen + 1)
-	exec 'normal '.l:openlen.'x'
-	call cursor(line("'<"), col("'<"))
 	exec 'normal '.l:closelen.'x'
+	call cursor(line("'<"), col("'<"))
+	exec 'normal '.l:openlen.'x'
 	let l = line("'>")                          " storing line for the 'G' command
 	let c = col("'>") - l:openlen - l:closelen  " storing columns for the '|' command
 	exec 'normal v'.l.'G'.c."|\<C-g>"
