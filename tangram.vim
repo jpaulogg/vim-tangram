@@ -65,7 +65,6 @@ function TangramComplete(findstart, base)
 		return l:start
 	else
         " complete subdirectories names like file completion
-		let s:dir = stdpath("config").'/snippets/'
 		if getline('.') =~ '/'
 			let l:subdir = matchstr(getline('.'), "\\a\\+")
 			let l:input  = split(glob(s:dir.l:subdir.'/*'))
