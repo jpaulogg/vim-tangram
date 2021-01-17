@@ -37,7 +37,7 @@ vmap <unique><silent> <C-s>d <C-c>h2x`<2xv`>4h<C-g>
 " overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
-" FUNCTIONS {{{1
+" FUNCTION {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                         " file type subdir
@@ -74,7 +74,7 @@ function TangramComplete(findstart, base)
 		else
 			let l:subdir = &ft.'/'
 			let l:input  = split(glob(s:dir."*")) +
-			             \ split(glob(s:dir.l:subdir."*"))
+			              \split(glob(s:dir.l:subdir."*"))
 		endif
 		let l:output = []
 		for i in l:input
@@ -84,7 +84,7 @@ function TangramComplete(findstart, base)
 				let l:item = fnamemodify(i, ":t:r")
 			endif
 			if l:item =~ a:base
-				call add(l:output, {'word': l:item, 'menu': '[snippet]' })
+				call add(l:output, {'word': l:item, 'menu': '[tangram]' })
 			endif
 		endfor
 		return l:output
