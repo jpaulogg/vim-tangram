@@ -9,6 +9,7 @@ s_CTRL-N	tangram.txt	/*s_CTRL-N*
 s_CTRL-P	tangram.txt	/*s_CTRL-P*
 s_CTRL-S_n	tangram.txt	/*s_CTRL-S_n*
 s_CTRL-S_p	tangram.txt	/*s_CTRL-S_p*
+tangram-add-snippet	tangram.txt	/*tangram-add-snippet*
 tangram-complete	tangram.txt	/*tangram-complete*
 tangram-delimiters	tangram.txt	/*tangram-delimiters*
 tangram-directories	tangram.txt	/*tangram-directories*
@@ -16,7 +17,6 @@ tangram-insert	tangram.txt	/*tangram-insert*
 tangram-mappings	tangram.txt	/*tangram-mappings*
 tangram-options	tangram.txt	/*tangram-options*
 tangram-placeholders	tangram.txt	/*tangram-placeholders*
-tangram-snippets	tangram.txt	/*tangram-snippets*
 tangram.txt	tangram.txt	/*tangram.txt*
 v_CTRL-S_A	tangram.txt	/*v_CTRL-S_A*
 v_CTRL-S_D	tangram.txt	/*v_CTRL-S_D*

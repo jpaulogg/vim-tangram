@@ -83,13 +83,14 @@ function s:Surround()
 endfunction
 
 function s:Dsurround()
-	let l:length = len(g:tangram_open)
-	call cursor(line('.'), col('.') - l:length + 1)
-	exec 'normal '.l:length.'x'
+	let l:openlen  = len(g:tangram_open)
+	let l:closelen = len(g:tangram_close)
+	call cursor(line('.'), col('.') - l:openlen + 1)
+	exec 'normal '.l:openlen.'x'
 	call cursor(line("'<"), col("'<"))
-	exec 'normal '.l:length.'x'
-	let l = line("'>")                    " storing line for the 'G' command
-	let c = col("'>") - 2 * l:length      " storing columns for the '|' command
+	exec 'normal '.l:closelen.'x'
+	let l = line("'>")                          " storing line for the 'G' command
+	let c = col("'>") - l:openlen - l:closelen  " storing columns for the '|' command
 	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
 
