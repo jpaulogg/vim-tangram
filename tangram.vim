@@ -10,33 +10,12 @@ if exists('g:loaded_tangram')
 endif
 let g:loaded_tangram = 1
 
-" OPTIONS {{{1
-" Define a directory for saving your snippets files. These are the defaults paths:
-if has('nvim')
-	let g:tangram_dir = $HOME."/.config/nvim/snippets/"
-else
-	let g:tangram_dir = $HOME.".vim/snippets/"
-endif
-
-if g:tangram_dir !~ '/$'
-	let g:tangram_dir .= '/'
-endif
-
-" You can also define delimiters for snippets place holders. They must start with
-" single '<' and end with single '>'. Example:  let g:tangram_open  = '<-:'
-if !exists('g:tangram_open')                  " let g:tangram_close = ':->'
-	let g:tangram_open = '<{'
-endif
-if !exists('g:tangram_close')
-	let g:tangram_close = '}>'
-endif
-
 " MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call <SID>Search(g:tangram_open,  'z')<CR>
-nmap <silent> <SID>(select_prev) :call <SID>Search(g:tangram_close, 'be')<CR>
+nmap <silent> <SID>(select_next) :call <SID>Search('<{', 'z')<CR>
+nmap <silent> <SID>(select_prev) :call <SID>Search('}>', 'be')<CR>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-s>n <C-c><SID>(select_next)
@@ -59,14 +38,14 @@ smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                                 " file type subdir
-	let l:file = g:tangram_dir.l:subdir.l:keyword.'.snip'  " try subdir first
+	let l:file = stdpath("config").l:subdir.l:keyword.'.snip'  " try subdir first
 	if !filereadable(l:file)                               " otherwise, try main dir
-		let l:file = g:tangram_dir.l:keyword.'.snip'
+		let l:file = stdpath("config").l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
 	call cursor(line("'."), 1)
-	call s:Search(g:tangram_open, 'c')
+	call s:Search('<{', 'c')
 endfunction
 
 function s:Search(pattern, flags)
@@ -76,21 +55,19 @@ function s:Search(pattern, flags)
 endfunction
 
 function s:Surround()
-	exec 'normal a'.g:tangram_close
+	normal a}>
 	call cursor(line("'<"), col("'<"))
-	exec 'normal i'.g:tangram_open
+	normal i<{
 	exec "normal va>\<C-g>"
 endfunction
 
 function s:Dsurround()
-	let l:openlen  = len(g:tangram_open)
-	let l:closelen = len(g:tangram_close)
-	call cursor(line('.'), col('.') - l:openlen + 1)
-	exec 'normal '.l:openlen.'x'
+	call cursor(line('.'), col('.') - 1)
+	normal 2x
 	call cursor(line("'<"), col("'<"))
-	exec 'normal '.l:closelen.'x'
-	let l = line("'>")                          " storing line for the 'G' command
-	let c = col("'>") - l:openlen - l:closelen  " storing columns for the '|' command
+	normal 2x
+	let l = line("'>")                     " storing line for the 'G' command
+	let c = col("'>") - 4                  " storing columns for the '|' command
 	exec 'normal v'.l.'G'.c."|\<C-g>"
 endfunction
 
