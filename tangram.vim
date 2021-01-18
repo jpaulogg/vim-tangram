@@ -31,7 +31,7 @@ smap <unique> <C-p>  <C-c><SID>(select_prev)
 " add/delete '<{' and '}>' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
-vmap <unique><silent> <C-s>d <C-c>h2x`<2xv`>4h<C-g>
+vmap <unique><silent> <C-s>d <C-c>h2x`<2xv``<C-g>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 " depends on <C-s>d mapping.
