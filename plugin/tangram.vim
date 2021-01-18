@@ -79,11 +79,9 @@ endfunction
 function s:Dsurround()
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
-	"let c = l:openlen + l:closelen + 1
-	let c = col('.') - l:openlen - l:closelen
+	let c = col('.') - l:openlen - l:closelen             " store column for '|' command
 	exec 'normal '. (l:closelen - 1) .'h'.l:closelen.'x'
 	exec 'normal `<'.l:openlen.'x'
-	"""exec "normal v``'.c."hf>\<C-g>"
 	exec "normal v'<".c."|\<C-g>"
 endfunction
 
