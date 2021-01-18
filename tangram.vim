@@ -1,9 +1,10 @@
 " tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
 
 " Licence: public domain
-" Last Change: 2021/01/14  
+" Last Change: 2021/01/17  
+" Branch: raw
 
-" Snippet plugin as minimal as a tangram puzzle!
+	" Snippet plugin as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -11,7 +12,7 @@ endif
 let g:loaded_tangram = 1
 
 " OPTION - snippets main directory
-let s:dir = $HOME.'.config/nvim/snippets/'
+let s:dir = $HOME.'/.config/nvim/snippets/'
 
 " MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
