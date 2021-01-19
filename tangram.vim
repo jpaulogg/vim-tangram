@@ -3,7 +3,6 @@
 " Licence: public domain
 " Last Change: 2021/01/17  
 " Branch: raw
-
 " Code snippets as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
@@ -21,27 +20,23 @@ imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 nmap <silent> <SID>(select_next) <Cmd>call search('<{', 'z')<CR>va><C-g>
 nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'b')<CR>va><C-g>
 
+" jump to prev/next placeholder (outer level)
+smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
+smap <unique> <C-n>  <C-c>`><SID>(select_next)
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
-
+smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
 " <C-s>n in select mode jumps to inner placeholder.
 " I only use it after <C-s>d actually.
 smap <unique> <C-s>n <C-c><SID>(select_next)
 
-" '`>' and '`<' motions jumps to outer level of nested placeholders
-smap <unique> <C-n>  <C-c>`><SID>(select_next)
-smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
-smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
-
 " add/delete '<{' and '}>' delimiters to/from selection
-" <C-s>e mapping depends on <C-s>d
-" <C-s>d overrides 't' mark
+" <C-s>d overrides 't' mark. <C-s>e mapping depends on <C-s>d
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
 vmap <unique><silent> <C-s>d <C-c>`<2x`>F}hmtl2x`tv`<
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
-" depends on <C-s>d mapping.
-" overrides unnamed register
+" depends on <C-s>d mapping. overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
 " FUNCTION {{{1
