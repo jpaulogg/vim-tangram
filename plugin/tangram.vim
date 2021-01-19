@@ -39,11 +39,15 @@ nmap <silent> <SID>(select_next) :call search(g:tangram_open,  'z')<CR>va><C-g>
 nmap <silent> <SID>(select_prev) :call search(g:tangram_close, 'be')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
-smap <unique> <C-s>n <C-c><SID>(select_next)
-smap <unique> <C-n>  <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
-smap <unique> <C-s>p <C-c><SID>(select_prev)
-smap <unique> <C-p>  <C-c><SID>(select_prev)
+
+" select inner level of nested placeholder
+smap <unique> <C-s>n <C-c>`<<SID>(select_next)
+smap <unique> <C-s>p <C-c>`><SID>(select_prev)
+
+" select outter level of nested placeholder
+smap <unique> <C-n>  <C-c>`><SID>(select_next)
+smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
@@ -82,7 +86,7 @@ function s:Dsurround()
 	let c = col('.') - l:openlen - l:closelen             " store column for '|' command
 	exec 'normal '. (l:closelen - 1) .'h'.l:closelen.'x'
 	exec 'normal `<'.l:openlen.'x'
-	exec "normal v'<".c."|\<C-g>"
+	exec "normal v'>".c."|\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
