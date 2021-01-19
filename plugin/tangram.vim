@@ -80,13 +80,15 @@ function s:Surround()
 	exec "normal va>\<C-g>"
 endfunction
 
-function s:Dsurround()
+function s:Dsurround() abort
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
-	let c = col('.') - l:openlen - l:closelen             " store column for '|' command
-	exec 'normal '. (l:closelen - 1) .'h'.l:closelen.'x'
 	exec 'normal `<'.l:openlen.'x'
-	exec "normal v'>".c."|\<C-g>"
+	let l:end = searchpairpos(g:tangram_open, '', g:tangram_close)
+	let l:end[1] -= 1
+	exec 'normal '.l:closelen.'x'
+	call cursor(l:end)
+	normal v`<
 endfunction
 
 " COMPLETE FUNCTION {{{1
