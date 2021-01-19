@@ -31,7 +31,7 @@ smap <unique> <C-p>  <C-c><SID>(select_prev)
 " add/delete '<{' and '}>' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
-vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
+vmap <unique><silent> <C-s>d <C-c>`>2hmtl2x`<2xv`t
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 " depends on <C-s>d mapping.
@@ -53,11 +53,6 @@ function s:Insert() abort
 	exec "normal va<\<C-g>"    
 endfunction
 
-function s:Dsurround()
-	let c = col('.') - 4            " store column to '|' command
-	normal h2x`<2x
-	exec "normal v'<".c."|\<C-g>"
-endfunction
 " COMPLETE FUNCTION {{{1
 set completefunc=TangramComplete
 
