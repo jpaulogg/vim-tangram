@@ -79,8 +79,10 @@ A more realistic example from "~/.config/nvim/snippets/r/packages.snip":
 	`}`
 `}`
 
-Note that you can create nested placeholders. See |s_CTRL-S_n| |s_CTRL-S_p| for
-jumping through placeholders levels.
+Note that you can create nested placeholders.  You can jump through nested
+placeholders levels in select and insert modes with <C-s>n and <C-s>p. For
+faster movement in select mode you can also use <C-n> and <C-p> (just hold
+<CTRL> and press 'n' or 'p').
 
 Use |tangram-delimiters| to add placeholders  to  the snippet text. In  visual
 and select modes, <C-s>a adds delimiters to selected area and <C-s>d deletes
@@ -135,18 +137,17 @@ CTRL-S n      Visually selects next placeholder and starts |Select-mode|.
               If it is a nested placeholder, selects the outer level.
 
                                                          *i_CTRL-S_P*
-CTRL-S p      Visually selects  previous placeholder and starts |Select-mode|.
-              If the current selected area is a nested placeholder, selects
-              the inner level, otherwise selects the outer level.
+CTRL-S p      Same as above, but selects previous instead.
 
-                                                         *s_CTRL-N* *s_CTRL-S_n*
-CTRL-N   or
-CTRL-S n      For faster movement in select mode, hold <CTRL> and then
-              press "n" (next). CTRL-S n still works.
-                                                         *s_CTRL-P* *s_CTRL-S_p*
-CTRL-N   or
-CTRL-S p      For faster movement in select mode, hold <CTRL> and then
-              press "p" (previous). CTRL-S p still works.
+                                                         *s_CTRL-N*
+CTRL-N        Same as |i_CTRL-S_N|, but in select mode.
+                                                         *s_CTRL-S_N*
+CTRL-S n      Same as above, but selects the inner level instead.
+
+                                                         *s_CTRL-P*
+CTRL-P        Same as |i_CTRL-S_P|, but in select mode.
+                                                         *s_CTRL-S_P*
+CTRL-S p      Same as above, but selects the inner level instead.
 
                                                          *v_CTRL-S_A*
 CTRL-S a      Adds placeholders delimiters to selected area.
