@@ -82,20 +82,19 @@ endfunction
 
 function s:Dsurround() abort
 	call cursor(line("'<"), col("'<"))
-	let l:start = searchpair(g:tangram_open, '', g:tangram_close, 'bcr')
 	" test if it is a placeholder
-	if l:start == 0
+	if searchpair(g:tangram_open, '', g:tangram_close, 'bcr') == 0
 		return
 	endif
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
 	exec 'normal '.l:openlen.'x'
-	let l:end = searchpairpos(g:tangram_open, '', g:tangram_close)
-	" position just before closing delimiter
-	let l:end[1] -= 1
+	let l:pos = searchpairpos(g:tangram_open, '', g:tangram_close)
+	" position just before closing delimiter (if 0, use column 1)
+	let l:pos[1] = max([l:end[1] - 1, 1])
 	exec 'normal '.l:closelen.'x'
-	call cursor(l:end)
-	normal v`<
+	call cursor(l:pos)
+	exec "normal v`<\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
