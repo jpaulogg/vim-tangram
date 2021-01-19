@@ -4,7 +4,7 @@
 " Last Change: 2021/01/17  
 " Branch: raw
 
-	" Snippet plugin as minimal as a tangram puzzle!
+" Code snippets as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -18,20 +18,26 @@ let s:dir = $HOME.'/.config/nvim/snippets/'
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) <Cmd>call search('<{',  'z')<CR>va><C-g>
-nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'be')<CR>va><C-g>
+nmap <silent> <SID>(select_next) <Cmd>call search('<{', 'z')<CR>va><C-g>
+nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'b')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
-smap <unique> <C-s>n <C-c><SID>(select_next)
-smap <unique> <C-n>  <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
-smap <unique> <C-s>p <C-c><SID>(select_prev)
-smap <unique> <C-p>  <C-c><SID>(select_prev)
+
+" <C-s>n in select mode jumps to inner placeholder.
+" I only use it after <C-s>d actually.
+smap <unique> <C-s>n <C-c><SID>(select_next)
+
+" '`>' and '`<' motions jumps to outer level of nested placeholders
+smap <unique> <C-n>  <C-c>`><SID>(select_next)
+smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
+smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
 " add/delete '<{' and '}>' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
+" <C-s>d overrides 't' mark
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
-vmap <unique><silent> <C-s>d <C-c>`>2hmtl2x`<2xv`t
+vmap <unique><silent> <C-s>d <C-c>`<2x`>F}hmtl2x`tv`<
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 " depends on <C-s>d mapping.
