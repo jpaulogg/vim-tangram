@@ -12,9 +12,9 @@ let g:loaded_tangram = 1
 
 " OPTIONS {{{1
 " Define a directory for saving your snippets files. These are the defaults paths:
-if has('nvim')
+if has('nvim') && !exists('g:tangram_dir')
 	let g:tangram_dir = $HOME."/.config/nvim/snippets/"
-else
+elseif !exists('g:tangram_dir')
 	let g:tangram_dir = $HOME.".vim/snippets/"
 endif
 
@@ -35,17 +35,17 @@ endif
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
 
 " jump through place holders
-nmap <silent> <SID>(select_next) :call search(g:tangram_open,  'z')<CR>va><C-g>
+nmap <silent> <SID>(select_next) :call search(g:tangram_open,   'z')<CR>va><C-g>
 nmap <silent> <SID>(select_prev) :call search(g:tangram_close, 'be')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
 
-" select inner level of nested placeholder
+" select next/previous inner placeholder
 smap <unique> <C-s>n <C-c>`<<SID>(select_next)
 smap <unique> <C-s>p <C-c>`><SID>(select_prev)
 
-" select outter level of nested placeholder
+" select next/previous outter placeholder
 smap <unique> <C-n>  <C-c>`><SID>(select_next)
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
@@ -81,10 +81,17 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
+	call cursor(line("'<"), col("'<"))
+	let l:start = searchpair(g:tangram_open, '', g:tangram_close, 'bcr')
+	" test if it is a placeholder
+	if l:start == 0
+		return
+	endif
 	let l:openlen  = len(g:tangram_open)
 	let l:closelen = len(g:tangram_close)
-	exec 'normal `<'.l:openlen.'x'
+	exec 'normal '.l:openlen.'x'
 	let l:end = searchpairpos(g:tangram_open, '', g:tangram_close)
+	" position just before closing delimiter
 	let l:end[1] -= 1
 	exec 'normal '.l:closelen.'x'
 	call cursor(l:end)
