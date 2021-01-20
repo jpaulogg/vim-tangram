@@ -31,11 +31,12 @@ smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
 smap <unique> <C-s>n <C-c><SID>(select_next)
 
 " add/delete '<{' and '}>' delimiters to/from selection
-" <C-s>d overrides 't' mark. <C-s>e mapping depends on <C-s>d
-vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va><C-g>
-vmap <unique><silent> <C-s>d <C-c>`<2x`>F}hmtl2x`tv`<
+" <C-s>e mapping depends on <C-s>d
+vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va>
+vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
+" to delete all placeholders :keepp '<,'>s/<{\|}>//g
 
-" expand simple expression within place holders - like '<{strftime('%c')}>'
+" expand simple expression within place holders - like ' <{strftime('%c')}> '
 " depends on <C-s>d mapping. overrides unnamed register
 smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
 
