@@ -1,9 +1,12 @@
-" tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
+" vim: set noet fdm=marker :
+" 'zR' to open and 'zM' to close all folds
 
+" tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
+" Snippet plugin as minimal as a tangram puzzle!
+
+" Branch:  master
 " Licence: public domain
 " Last Change: 2021/01/14  
-
-" Snippet plugin as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -64,11 +67,13 @@ function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                                 " file type subdir
 	let l:file = g:tangram_dir.l:subdir.l:keyword.'.snip'  " try subdir first
+
 	if !filereadable(l:file)                               " otherwise, try main dir
 		let l:file = g:tangram_dir.l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
+
 	call cursor(line("'."), 1)
 	call search(g:tangram_open, 'c')
 	exec "normal va>\<C-g>"
@@ -81,18 +86,21 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	call cursor(line("'<"), col("'<"))
 	" test if it is a placeholder
-	if searchpair(g:tangram_open, '', g:tangram_close, 'bcr') == 0
+	call cursor(line("'<"), col("'<"))
+	if searchpair(g:tangram_open, '', g:tangram_close, 'n') == 0
 		return
 	endif
-	let l:openlen  = len(g:tangram_open)
-	let l:closelen = len(g:tangram_close)
+
+	let [l:openlen, l:closelen]  = [len(g:tangram_open), len(g:tangram_close)]
 	exec 'normal '.l:openlen.'x'
-	let l:pos = searchpairpos(g:tangram_open, '', g:tangram_close)
+
 	" position just before closing delimiter (if 0, use column 1)
+	let l:pos = searchpairpos(g:tangram_open, '', g:tangram_close)
 	let l:pos[1] = max([l:end[1] - 1, 1])
+
 	exec 'normal '.l:closelen.'x'
+
 	call cursor(l:pos)
 	exec "normal v`<\<C-g>"
 endfunction
@@ -136,4 +144,3 @@ function TangramComplete(findstart, base)
 endfunction
 " }}}1
 
-"  vim: set noet fdm=marker :
