@@ -24,14 +24,15 @@ nmap <silent> <SID>(select_next) <Cmd>call search('<{', 'z')<CR>va><C-g>
 nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'b')<CR>va><C-g>
 
 " jump to prev/next placeholder (outer level)
-smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
-smap <unique> <C-n>  <C-c>`><SID>(select_next)
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
+
 smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
-" <C-s>n in select mode jumps to inner placeholder.
-" I only use it after <C-s>d actually.
+" <C-s>n in select mode jumps to inner placeholder. I only need this after <C-s>d.
 smap <unique> <C-s>n <C-c><SID>(select_next)
+
+smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
+smap <unique> <C-n>  <C-c>`><SID>(select_next)
 
 " add/delete '<{' and '}>' delimiters to/from selection
 " <C-s>e mapping depends on <C-s>d
