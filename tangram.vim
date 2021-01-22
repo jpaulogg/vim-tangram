@@ -1,9 +1,12 @@
-" tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
+" vim: set noet fdm=marker :
+" 'zR' to open and 'zM' to close all folds
 
+" tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
+" Code snippets as minimal as a tangram puzzle!
+
+" Branch:  raw
 " Licence: public domain
 " Last Change: 2021/01/17  
-" Branch: raw
-" Code snippets as minimal as a tangram puzzle!
 
 if exists('g:loaded_tangram')
 	finish
@@ -45,11 +48,13 @@ function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                         " file type subdir
 	let l:file = s:dir.l:subdir.l:keyword.'.snip'  " try subdir first
+
 	if !filereadable(l:file)                       " otherwise, try main dir
 		let l:file = s:dir.l:keyword.'.snip'
 	endif
 	delete _
 	exec '-read '.l:file
+
 	call cursor(line("'."), 1)
 	call search('<{', 'c')
 	exec "normal va<\<C-g>"    
@@ -76,6 +81,7 @@ function TangramComplete(findstart, base)
 			let l:input  = split(glob(s:dir."*")) +
 			              \split(glob(s:dir.l:subdir."*"))
 		endif
+
 		let l:output = []
 		for i in l:input
 			if isdirectory(i)
@@ -87,9 +93,8 @@ function TangramComplete(findstart, base)
 				call add(l:output, {'word': l:item, 'menu': '[tangram]' })
 			endif
 		endfor
+
 		return l:output
 	endif
 endfunction
 " }}}1
-
-"  vim: set noet fdm=marker :
