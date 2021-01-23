@@ -52,15 +52,15 @@ smap <unique> <C-s>p <C-c>`><SID>(select_prev)
 smap <unique> <C-n>  <C-c>`><SID>(select_next)
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
-" add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
-" <C-s>e mapping depends on <C-s>d
-vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
-vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
+" substitute all ocurrences of selected placeholder
+smap <unique><silent> <C-s>s <C-c>:call <SID>SubstituteAll()<CR>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
-" depends on <C-s>d mapping.
-" overrides unnamed register
-smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
+smap <unique><silent> <C-s>x <C-c>:call <SID>ExpandExpression()<CR>
+
+" add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
+vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
+vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
 
 " FUNCTIONS {{{1
 function s:Insert() abort
@@ -77,6 +77,22 @@ function s:Insert() abort
 	call cursor(line("'."), 1)
 	call search(g:tangram_open, 'c')
 	exec "normal va>\<C-g>"
+endfunction
+
+function s:ExpandVimExpr()
+	let l:save_reg = @s
+	normal gv"sy
+	exec 'let l:expr = '.@s
+	exec 'normal gvc'.l:expr
+	normal v`<
+	let @s = l:save_reg
+endfunction
+
+function s:SubstituteAll()
+	let l:save_reg = @s
+	normal gv"sy
+	let l:sub = input('')
+	exec '%s/'.@s.'/'.l:sub.'/g'
 endfunction
 
 function s:Surround()
