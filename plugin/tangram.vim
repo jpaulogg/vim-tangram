@@ -82,7 +82,7 @@ endfunction
 function s:Surround()
 	exec 'normal `>a'.g:tangram_close
 	exec 'normal `<i'.g:tangram_open
-	exec "normal va>\<C-g>"
+	exec "normal va>"
 endfunction
 
 function s:Dsurround() abort
@@ -95,14 +95,16 @@ function s:Dsurround() abort
 	let [l:openlen, l:closelen]  = [len(g:tangram_open), len(g:tangram_close)]
 	exec 'normal '.l:openlen.'x'
 
-	" position just before closing delimiter (if 0, use column 1)
+	" position just before closing delimiter (if it isn't the first column, go back one column)
 	let l:pos = searchpairpos(g:tangram_open, '', g:tangram_close)
-	let l:pos[1] = max([l:end[1] - 1, 1])
+	if l:pos[1] != 1
+		let l:pos[1] -= 1
+	endif
 
 	exec 'normal '.l:closelen.'x'
 
 	call cursor(l:pos)
-	exec "normal v`<\<C-g>"
+	exec "normal v`<"
 endfunction
 
 " COMPLETE FUNCTION {{{1
