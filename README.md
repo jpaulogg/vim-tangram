@@ -13,7 +13,7 @@ the script, but it's not like this is much more difficult than doing it on your 
 - replaces all occurrences of selected placeholder at once
 - handles nested placeholders well 
 - easy to jump through placeholders
-- very light, only ~85 lines of code.
+- very light, only ~90 lines of code.
 
 ## Installation
 

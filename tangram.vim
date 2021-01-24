@@ -37,7 +37,7 @@ smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 smap <unique> <C-n>  <C-c>`><SID>(select_next)
 
 " replace all occurrences of selected placeholder
-smap <unique> <C-s>r <C-g>"sy:keepp %s/<C-r>s//g<Left><Left>
+smap <unique> <C-s>r <C-c>:call <SID>ReplaceAll()<CR>
 
 " expand simple expression within place holders - like ' <{strftime('%c')}> '
 " overrides 's' register
@@ -47,7 +47,7 @@ smap <unique> <C-s>e <C-c>F}"syi}gvc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va>
 vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
 
-" FUNCTION {{{1
+" INSERT {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                         " file type subdir
@@ -62,6 +62,15 @@ function s:Insert() abort
 	call cursor(line("'."), 1)
 	call search('<{', 'c')
 	exec "normal va<\<C-g>"    
+endfunction
+
+" REPLACE {{{1
+function s:ReplaceAll()
+	normal gv"sy
+	let l:sub = input('')
+	exec '%s/'.@s.'/'.l:sub.'/g'
+	call cursor(getpos("'<")[1:2])
+	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
