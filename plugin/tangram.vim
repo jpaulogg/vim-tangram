@@ -53,7 +53,7 @@ smap <unique> <C-n>  <C-c>`><SID>(select_next)
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
 " substitute all ocurrences of selected placeholder
-smap <unique><silent> <C-s>s <C-c>:call <SID>SubstituteAll()<CR>
+smap <unique><silent> <C-s>r <C-c>:call <SID>SubstituteAll()<CR>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 smap <unique><silent> <C-s>e <C-c>:call <SID>ExpandExpression()<CR>

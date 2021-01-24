@@ -1,6 +1,6 @@
 *tangram.txt* snippets plugin as minimal as a tangram puzzle!
 
-                 ________
+                 _________
                 │╲      ╱│
                 │ ╲    ╱ │
                 │  ╲  ╱╲ │
@@ -62,8 +62,8 @@ also place your snippets in subdirectories within the main  directory,  for
 example "~/.config/nvim/snippets/python/foo.snip".
                                                           *tangram-placeholders*
 Placeholders  marks  parts of the snippet where  you  may want to insert some
-new text, confirm  surrounded text or  trigger vim expression. See |s_CTRL-S_D|
-and |s_CTRL-S_E|.
+new text, confirm  surrounded text or  trigger vim expression. See |s_CTRL-S_D|,
+|s_CTRL-S_E| and |s_CTRL-S_R|.
 
 `<{ }>, <{default value}>, <{strftime('%c')}>`
 
@@ -141,22 +141,27 @@ CTRL-S p      Same as above, but selects previous instead.
 
                                                          *s_CTRL-N*
 CTRL-N        Same as |i_CTRL-S_N|, but in select mode.
+
                                                          *s_CTRL-S_N*
 CTRL-S n      Same as above, but selects the inner level instead.
 
                                                          *s_CTRL-P*
 CTRL-P        Same as |i_CTRL-S_P|, but in select mode.
+
                                                          *s_CTRL-S_P*
 CTRL-S p      Same as above, but selects the inner level instead.
 
+                                                         *s_CTRL-S_R*
+CTRL-S r      Prompts for text to replace all occurrences of
+              selected placeholder.
+                                                         *v_CTRL-S_E*
+CTRL-S e      Expands expressions within selected placeholder.
+              See |tangram-placeholders|.
                                                          *v_CTRL-S_A*
 CTRL-S a      Adds placeholders delimiters to selected area.
               See |g:tangram_open| and |g:tangram_close|.
                                                          *v_CTRL-S_D*
-CTRL-S d      Deletes placeholders delimiters from selected area and keeps
-              internal text.
-                                                         *v_CTRL-S_E*
-CTRL-S e      Expands expressions within selecteed placeholder.
-              See |tangram-placeholders|.
+CTRL-S d      Deletes placeholders delimiters from selected area
+              and keeps internal text.
 
 vim: set et ft=help :
