@@ -94,6 +94,8 @@ function s:SubstituteAll()
 	normal gv"sy
 	let l:sub = input('')
 	exec '%s/'.@s.'/'.l:sub.'/g'
+	call cursor(getpos("'<")[1:2])
+	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
 	let @s = l:save_reg
 endfunction
 
