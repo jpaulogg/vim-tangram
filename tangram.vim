@@ -18,6 +18,7 @@ let s:dir = $HOME.'/.config/nvim/snippets/'
 
 " MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
+imap <unique> <C-s><C-i> <C-s>i
 
 " jump through place holders
 nmap <silent> <SID>(select_next) <Cmd>call search('<{', 'z')<CR>va><C-g>
