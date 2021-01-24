@@ -83,7 +83,7 @@ endfunction
 function s:ExpandVimExpr()
 	let l:save_reg = @s
 	normal gv"sy
-	exec 'let l:expr = '.@s
+	exec 'let l:expr = '.substitute(@s, g:tangram_open.'\|'.g:tangram_close, '', 'g')
 	exec 'normal gvc'.l:expr
 	normal v`<
 	let @s = l:save_reg
@@ -169,5 +169,3 @@ function TangramComplete(findstart, base)
 		return l:output
 	endif
 endfunction
-" }}}1
-
