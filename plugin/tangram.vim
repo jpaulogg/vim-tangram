@@ -56,13 +56,13 @@ smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 smap <unique><silent> <C-s>s <C-c>:call <SID>SubstituteAll()<CR>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
-smap <unique><silent> <C-s>x <C-c>:call <SID>ExpandExpression()<CR>
+smap <unique><silent> <C-s>e <C-c>:call <SID>ExpandExpression()<CR>
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
 vmap <unique><silent> <C-s>d <C-c>:call <SID>Dsurround()<CR>
 
-" FUNCTIONS {{{1
+" INSERT SNIPPET {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                                 " file type subdir
@@ -79,6 +79,7 @@ function s:Insert() abort
 	exec "normal va>\<C-g>"
 endfunction
 
+" DEALING WITH PLACEHOLDERS CONTENT {{{1
 function s:ExpandVimExpr()
 	let l:save_reg = @s
 	normal gv"sy
@@ -93,8 +94,10 @@ function s:SubstituteAll()
 	normal gv"sy
 	let l:sub = input('')
 	exec '%s/'.@s.'/'.l:sub.'/g'
+	let @s = l:save_reg
 endfunction
 
+" ADD/REMOVE PLACEHOLDERS DELIMITERS {{{1
 function s:Surround()
 	exec 'normal `>a'.g:tangram_close
 	exec 'normal `<i'.g:tangram_open
@@ -102,28 +105,34 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	" test if it is a placeholder
-	call cursor(line("'<"), col("'<"))
-	if searchpair(g:tangram_open, '', g:tangram_close, 'n') == 0
+	let l:open_pos  = getpos("'<")[1:2]
+	call cursor(l:open_pos)
+
+	let l:close_pos = searchpairpos(g:tangram_open, '', g:tangram_close, 'n')
+	if l:close_pos == [0, 0]
 		return
 	endif
 
-	let [l:openlen, l:closelen]  = [len(g:tangram_open), len(g:tangram_close)]
-	exec 'normal '.l:openlen.'x'
+	let l:open_len = len(g:tangram_open)
+	exec 'normal '.l:open_len.'x'
 
-	" position just before closing delimiter (if it isn't the first column, go back one column)
-	let l:pos = searchpairpos(g:tangram_open, '', g:tangram_close)
-	if l:pos[1] != 1
-		let l:pos[1] -= 1
+	if l:open_pos[0] == l:close_pos[0]
+		let l:close_pos[1] -= l:open_len
+	endif
+	call cursor(l:close_pos)
+
+	let l:close_len = len(g:tangram_close)
+	exec 'normal '.l:close_len.'x'
+
+	" line and column for visual selection at the end
+	if col('.') != 1
+		normal be
 	endif
 
-	exec 'normal '.l:closelen.'x'
-
-	call cursor(l:pos)
 	exec "normal v`<"
 endfunction
 
-" COMPLETE FUNCTION {{{1
+" INS-COMPLETE FUNCTION {{{1
 if &completefunc == ''
 	set completefunc=TangramComplete
 endif
