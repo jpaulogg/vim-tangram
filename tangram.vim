@@ -34,15 +34,16 @@ smap <unique> <C-s>n <C-c><SID>(select_next)
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 smap <unique> <C-n>  <C-c>`><SID>(select_next)
 
-" add/delete '<{' and '}>' delimiters to/from selection
-" <C-s>e mapping depends on <C-s>d
-vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va>
-vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
-" to delete all placeholders :keepp '<,'>s/<{\|}>//g
+" replace all occurrences of selected placeholder
+smap <unique> <C-s>r <C-g>"sy:keepp %s/<C-r>s//g<Left><Left>
 
 " expand simple expression within place holders - like ' <{strftime('%c')}> '
-" depends on <C-s>d mapping. overrides unnamed register
-smap <unique> <C-s>e <C-s>d<C-g>c<C-r>=<C-r>"<CR><C-c>v`<<C-g>
+" overrides 's' register
+smap <unique> <C-s>e <C-c>F}"syi}gvc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
+
+" add/delete '<{' and '}>' delimiters to/from selection
+vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va>
+vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
 
 " FUNCTION {{{1
 function s:Insert() abort
