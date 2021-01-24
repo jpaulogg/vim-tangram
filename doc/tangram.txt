@@ -27,10 +27,10 @@ In  different types of files we can access snippets with different keywords.
 Let's say that |tangram-directories| have the following files:
 
 {subdir}file name                 keyword by file type ~
-                             -               r           python
-"foobar.snip"             foobar             -              -
-"r/foobar.snip"           r/foobar         foobar        r/foobar
-"python/foobar.snip"      python/foobar    python/foobar foobar
+                             -               r              python
+"foobar.snip"             foobar             -                -
+"r/foobar.snip"           r/foobar         foobar          r/foobar
+"python/foobar.snip"      python/foobar    python/foobar   foobar
 
 NOTE: It is recommended  to  rename the  file  in  the  main  directory to
 "Foobar.snip". That way, keyword for that file in all types of files would
@@ -45,10 +45,10 @@ subdirectories names. See |i_CTRL-X_CTRL-F|.
 
 Following the last example, we have:
 {subdir}file name                typing before completion ~
-                             -               r             python
-"Foobar.snip"             Foo...           Foo...        Foo...
-"r/foobar.snip"           r/foo...         foo...        r/foo...
-"python/foobar.snip"      python/foo...    python/foo... foo...
+                             -               r              python
+"Foobar.snip"             Foo...           Foo...          Foo...
+"r/foobar.snip"           r/foo...         foo...          r/foo...
+"python/foobar.snip"      python/foo...    python/foo...   foo...
 
 Related: |tangram-placeholders|.
 
@@ -61,11 +61,12 @@ recommended to capitalize first letter of main directory snippets). You can
 also place your snippets in subdirectories within the main  directory,  for
 example "~/.config/nvim/snippets/python/foo.snip".
                                                           *tangram-placeholders*
-Placeholders  marks  parts of the snippet where  you  may want to insert some
-new text, confirm  surrounded text or  trigger vim expression. See |s_CTRL-S_D|,
-|s_CTRL-S_E| and |s_CTRL-S_R|.
 
-`<{ }>, <{default value}>, <{strftime('%c')}>`
+Placeholders marks parts of the snippet where you may want  to  insert some
+text, replace all its occurrences, confirm the surrounded text or trigger a
+vim expression. See |s_CTRL-S_R|, |s_CTRL-S_D| and |s_CTRL-S_E|.
+
+`<{ }>, <{replace all occurrences}>, <{default value}>, <{strftime('%c')}>`
 
 A more realistic example from "~/.config/nvim/snippets/r/packages.snip":
 
