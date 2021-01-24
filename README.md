@@ -13,10 +13,13 @@ not like this is much more difficult than doing it on your vimrc.
 
 ## Features
 
-- snippets by file type (easy to access when editing another file type)
-- accept placeholders with default values
-- accept placeholders with tags to replace in all file
-- accept placeholders with vim expression
+- snippets by file type
+- easy to access when editing another file type (just type subdirectory before)
+- completion function that works similar to file completion (will set `completefunc` option)
+- accepts placeholders with vim expression
+- replaces all occurrences of selected placeholder at once
+- handles nested placeholders well 
+- easy to jump through placeholders
 - very light, only ~143 lines of code.
 
 ## Mappings
@@ -33,7 +36,8 @@ not like this is much more difficult than doing it on your vimrc.
 
 `<C-s>e` expands vim expression within the selected placeholder (select mode).
 
-Check [tangram-mappings] for all the mappings.
+Check [tangram-mappings](https://github.com/jpaulogg/vim-tangram/blob/fa2dc00c2f9578823ff8741857a45be5592a8659/doc/tangram.txt#L130-L166)
+for all the mappings.
 
 ## Snippets files
 
