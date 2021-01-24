@@ -14,7 +14,8 @@ not like this is much more difficult than doing it on your vimrc.
 ## Features
 
 - snippets by file type
-- easy to access when editing another file type (just type subdirectory before)
+- easy to access when editing another file type (just type file tipe as a subdirectory before
+  snippet keyword)
 - completion function that works similar to file completion (will set `completefunc` option)
 - accepts placeholders with vim expression
 - replaces all occurrences of selected placeholder at once
