@@ -53,7 +53,7 @@ smap <unique> <C-n>  <C-c>`><SID>(select_next)
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 
 " substitute all ocurrences of selected placeholder
-smap <unique><silent> <C-s>r <C-c>:call <SID>SubstituteAll()<CR>
+smap <unique><silent> <C-s>r <C-c>:call <SID>ReplaceAll()<CR>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
 smap <unique><silent> <C-s>e <C-c>:call <SID>ExpandVimExpr()<CR>
@@ -89,7 +89,7 @@ function s:ExpandVimExpr()
 	let @s = l:save_reg
 endfunction
 
-function s:SubstituteAll()
+function s:ReplaceAll()
 	let l:save_reg = @s
 	normal gv"sy
 	let l:sub = input('')
