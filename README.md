@@ -6,12 +6,14 @@ the script, but it's not like this is much more difficult than doing it on your 
 
 ## Features
 
-- snippets by file type (easy to access when editing another file type)
+- snippets by file type
+- easy to access when editing another file type (just type subdirectory before)
+- completion function that works similar to file completion (will set `completefunc` option)
 - accepts placeholders with vim expression
 - replaces all occurrences of selected placeholder at once
 - handles nested placeholders well 
 - easy to jump through placeholders
-- very light, only ~143 lines of code.
+- very light, only ~85 lines of code.
 
 ## Installation
 
