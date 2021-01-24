@@ -38,9 +38,9 @@ Check [tangram-mappings] for all the mappings.
 ## Snippets files
 
 Snippets files must be placed in the [tangram-directories](https://github.com/jpaulogg/vim-tangram/blob/cbdbc030c6ccd40d04e64e5363ff53520f70f867/doc/tangram.txt#L101-L113)
-and must end with '.snip' extension, for example "~/.config/nvim/snippets/Foo.snip" (it is
+and must end with '.snip' extension, for example "\~/.config/nvim/snippets/Foo.snip" (it is
 recommended to capitalize first letter of main directory snippets). You can also place your snippets
-in subdirectories within the main directory, for example "~/.config/nvim/snippets/python/foo.snip".
+in subdirectories within the main directory, for example "\~/.config/nvim/snippets/python/foo.snip".
 
 You can define the path to snippets directory with the `g:tangram_dir` variable.
 
