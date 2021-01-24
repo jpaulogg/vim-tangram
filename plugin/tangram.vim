@@ -56,7 +56,7 @@ smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 smap <unique><silent> <C-s>r <C-c>:call <SID>SubstituteAll()<CR>
 
 " expand simple expression within place holders - like '<{strftime('%c')}>'
-smap <unique><silent> <C-s>e <C-c>:call <SID>ExpandExpression()<CR>
+smap <unique><silent> <C-s>e <C-c>:call <SID>ExpandVimExpr()<CR>
 
 " add/delete 'g:tangram_open' and 'g:tangram_close' delimiters to/from selection
 vmap <unique><silent> <C-s>a <C-c>:call <SID>Surround()<CR>
