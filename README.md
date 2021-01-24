@@ -67,8 +67,10 @@ Plug 'jpaulogg/vim-tangram'
 
 ```bash
 # built-in package support (in vim use '~/.vim/' instead of '~/.config/nvim')
-mkdir -p ~/.config/nvim/pack/anything/start/vim-tangram
-cd ~/.config/nvim/pack/anything/start/vim-tangram
+mkdir -p ~/.config/nvim/pack/anything/start/
+cd ~/.config/nvim/pack/anything/start/
+git clone https://github.com/jpaulogg/vim-tangram.git
+nvim -u NONE -c "helptags vim-tangram/doc" -c q
 ```
 
 To install "raw" branch:
