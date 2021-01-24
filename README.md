@@ -64,7 +64,7 @@ Install using your favorite package manager, or use (Neo)Vim's built-in package
 support.
 
 ```vim
-# vim-plug
+" vim-plug
 Plug 'jpaulogg/vim-tangram'
 :PlugInstall
 ```
