@@ -1,8 +1,8 @@
 # tangram.vim
 
-This is the "raw" branch. Only ~85 lines of code. No global variables, no concerns with registers
-and things like that, just the script with my default options. Any changes must be done directly in
-the script, but it's not like this is much more difficult than doing it on your vimrc.
+This is the "raw" branch. No global variables, no concerns with registers and things like that, just
+the script with my default options. Any changes must be done directly in the script, but it's not
+like this is much more difficult than doing it on your vimrc.
 
 ## Features
 
