@@ -26,6 +26,8 @@ nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'b')<CR>va><C-g>
 " jump to prev/next placeholder (outer level)
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
+imap <unique> <C-s><C-n> <C-s>n
+imap <unique> <C-s><C-p> <C-s>p
 
 smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
 " <C-s>n in select mode jumps to inner placeholder. I only need this after <C-s>d.
