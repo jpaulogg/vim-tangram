@@ -78,14 +78,12 @@ git clone https://github.com/jpaulogg/vim-tangram.git
 nvim -u NONE -c "helptags vim-tangram/doc" -c q
 ```
 
-To install "raw" branch:
+To install "raw" branch from the shell:
 
 ```bash
 # in vim use '~/.vim/' instead of '~/.config/nvim'
-mkdir -p ~/.config/nvim/plugin/
-cd ~/.config/nvim/plugin/
-git clone -b raw https://github.com/jpaulogg/vim-tangram
-rm -rf plugin/vim-tangram/.git* plugin/vim-tangram/README.md
+curl -fLo ~/.config/nvim/plugin/vim-tangram/tangram.vim --create-dirs \
+	https://raw.githubusercontent.com/jpaulogg/vim-tangram/raw/tangram.vim
 ```
 
 ## Similar Plugins
