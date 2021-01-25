@@ -7,16 +7,16 @@ snippet plugins are much more complex and elaborate than my solutions, I decided
 little plugin. I hope it can be useful for other people as well.
 
 Ps: If you want something even lighter, take a look at the [raw](https://github.com/jpaulogg/vim-tangram/tree/raw)
-branch (~85 lines of code). No global variables, no concerns with registers and things like that,
+branch (~90 lines of code). No global variables, no concerns with registers and things like that,
 just the script with my default options. Any changes must be done directly in the script, but it's
 not like this is much more difficult than doing it on your vimrc.
 
 ## Features
 
 - snippets by file type
-- easy to access when editing another file type (just type file tipe as a subdirectory before
+- easy to access when editing another file type (just type file type as a subdirectory before
   snippet keyword)
-- completion function that works similar to file completion (will set `completefunc` option)
+- completion function that works similar to file completion (if empty, will set `completefunc` option)
 - accepts placeholders with vim expression
 - replaces all occurrences of selected placeholder at once
 - handles nested placeholders well 
@@ -37,12 +37,12 @@ not like this is much more difficult than doing it on your vimrc.
 
 `<C-s>e` expands vim expression within the selected placeholder (select mode).
 
-Check [tangram-mappings](https://github.com/jpaulogg/vim-tangram/blob/fa2dc00c2f9578823ff8741857a45be5592a8659/doc/tangram.txt#L130-L166)
+Check [tangram-mappings](https://github.com/jpaulogg/vim-tangram/blob/391fee3f58731022fe064fcd9a29ec0753af7abd/doc/tangram.txt#L130-L131)
 for all the mappings.
 
 ## Snippets files
 
-Snippets files must be placed in the [tangram-directories](https://github.com/jpaulogg/vim-tangram/blob/cbdbc030c6ccd40d04e64e5363ff53520f70f867/doc/tangram.txt#L101-L113)
+Snippets files must be placed in the [tangram-directories](https://github.com/jpaulogg/vim-tangram/blob/391fee3f58731022fe064fcd9a29ec0753af7abd/doc/tangram.txt#L102-L114)
 and must end with '.snip' extension, for example "\~/.config/nvim/snippets/Foo.snip" (it is
 recommended to capitalize first letter of main directory snippets). You can also place your snippets
 in subdirectories within the main directory, for example "\~/.config/nvim/snippets/python/foo.snip".
@@ -57,7 +57,7 @@ occurrences, confirm the surrounded text or trigger a vim expression.
 `<{...}>, <{replace all occurrences}>, <{default value}>, <{strftime('%c')}>`
 
 You can define placeholders string with the placeholder delimiters with the `g:tangram_open` and
-`g:tangram_close` [variables](https://github.com/jpaulogg/vim-tangram/blob/cbdbc030c6ccd40d04e64e5363ff53520f70f867/doc/tangram.txt#L115-L126).
+`g:tangram_close` [variables](https://github.com/jpaulogg/vim-tangram/blob/391fee3f58731022fe064fcd9a29ec0753af7abd/doc/tangram.txt#L116-L127).
 
 ## Installation
 
