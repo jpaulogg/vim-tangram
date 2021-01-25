@@ -36,6 +36,7 @@ endif
 
 " MAPPINGS {{{1
 imap <unique><silent> <C-s>i <C-c>:call <SID>Insert()<CR>
+imap <unique> <C-s><C-i> <C-s>i
 
 " jump through place holders
 nmap <silent> <SID>(select_next) :call search(g:tangram_open,   'z')<CR>va><C-g>
@@ -43,6 +44,8 @@ nmap <silent> <SID>(select_prev) :call search(g:tangram_close, 'be')<CR>va><C-g>
 
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
+imap <unique> <C-s><C-n> <C-s>n
+imap <unique> <C-s><C-p> <C-s>p
 
 " select next/previous inner placeholder
 smap <unique> <C-s>n <C-c>`<<SID>(select_next)
