@@ -48,7 +48,7 @@ smap <unique> <C-s>e <C-c>F}"syi}gvc<C-r>=<C-r>s<CR><C-c>v`<<C-g>
 vmap <unique><silent> <C-s>a <C-c>`>a}><C-c>`<i<{<C-c>va>
 vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
 
-" INSERT {{{1
+" INSERT FUNCTION {{{1
 function s:Insert() abort
 	let l:keyword = expand('<cWORD>')
 	let l:subdir = &ft.'/'                         " file type subdir
@@ -65,7 +65,7 @@ function s:Insert() abort
 	exec "normal va<\<C-g>"    
 endfunction
 
-" REPLACE {{{1
+" REPLACE FUNCTION {{{1
 function s:ReplaceAll()
 	normal gv"sy
 	let l:sub = input('')
