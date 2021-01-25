@@ -97,7 +97,7 @@ function s:ReplaceAll()
 	normal gv"sy
 	let l:sub = input('')
 	exec '%s/'.@s.'/'.l:sub.'/g'
-	call cursor(getpos("'<")[1:2])
+	call cursor(line("'<"), col("'<"))
 	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
 	let @s = l:save_reg
 endfunction
@@ -110,7 +110,7 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	let l:open_pos  = getpos("'<")[1:2]
+	let l:open_pos  = cursor(line("'<"), col("'<"))
 	call cursor(l:open_pos)
 
 	let l:close_pos = searchpairpos(g:tangram_open, '', g:tangram_close, 'n')
@@ -121,6 +121,7 @@ function s:Dsurround() abort
 	let l:open_len = len(g:tangram_open)
 	exec 'normal '.l:open_len.'x'
 
+	" if open and close are in the same line
 	if l:open_pos[0] == l:close_pos[0]
 		let l:close_pos[1] -= l:open_len
 	endif
@@ -129,7 +130,6 @@ function s:Dsurround() abort
 	let l:close_len = len(g:tangram_close)
 	exec 'normal '.l:close_len.'x'
 
-	" line and column for visual selection at the end
 	if col('.') != 1
 		normal be
 	endif
@@ -153,13 +153,14 @@ function TangramComplete(findstart, base)
 	else
         " complete subdirectories names like file completion
 		if getline('.') =~ '/'
-			let l:subdir = matchstr(getline('.'), "\\a\\+")
-			let l:input  = split(glob(g:tangram_dir.l:subdir.'/*'))
+			let l:subdir = matchstr(getline('.'), "\\a\\+/")
+			let l:input  = []
 		else
 			let l:subdir = &ft.'/'
-			let l:input  = split(glob(g:tangram_dir."*")) +
-			             \ split(glob(g:tangram_dir.l:subdir."*"))
+			let l:input  = split(glob(g:tangram_dir."*"))
 		endif
+		let l:input += split(glob(g:tangram_dir.l:subdir.'*'))
+
 		let l:output = []
 		for i in l:input
 			if isdirectory(i)
