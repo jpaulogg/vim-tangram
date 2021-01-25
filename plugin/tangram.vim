@@ -88,7 +88,7 @@ function s:ExpandVimExpr()
 	normal gv"sy
 	exec 'let l:expr = '.substitute(@s, g:tangram_open.'\|'.g:tangram_close, '', 'g')
 	exec 'normal gvc'.l:expr
-	normal v`<
+	exec "normal v`<\<C-g>"
 	let @s = l:save_reg
 endfunction
 
