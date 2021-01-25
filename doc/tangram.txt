@@ -129,40 +129,45 @@ Ps: |g:tangram_open| and |g:tangram_close| don't have to be the same length.
 ==============================================================================
 MAPPINGS                                                      *tangram-mappings*
 
-                                                         *i_CTRL-S_I*
-CTRL-S i      Looks in |tangram-directories| for a file that matches the keyword
-              in front of the cursor and insert it in the current line.
+|Insert-mode|
 
-                                                         *i_CTRL-S_N*
-CTRL-S n      Visually selects next placeholder and starts |Select-mode|.
-              If it is a nested placeholder, selects the outer level.
+CTRL-S i                                    *i_CTRL-S_I* *i_CTRL-S_CTRL-I*
+CTRL-S CTRL-I    Looks in |tangram-directories| for a file that matches the keyword
+                 in front of the cursor and insert it in the current line.
+                 
+CTRL-S n                                    *i_CTRL-S_N* *i_CTRL-S_CTRL-N*
+CTRL-S CTRL-N    Visually selects next placeholder and starts |Select-mode|.
+                 If it is a nested placeholder, selects the outer level.
+                 
+CTRL-S p                                    *i_CTRL-S_P* *i_CTRL-S_CTRL-P*
+CTRL-S CTRL-P    Same as above, but selects previous instead.
+                 
+|Select-mode|
+                                                            *s_CTRL-N*
+CTRL-N           Same as |i_CTRL-S_N|, but in select mode.
+                 
+                                                            *s_CTRL-S_N*
+CTRL-S n         Same as above, but selects the inner level instead.
+                 
+                                                            *s_CTRL-P*
+CTRL-P           Same as |i_CTRL-S_P|, but in select mode.
+                 
+                                                            *s_CTRL-S_P*
+CTRL-S p         Same as above, but selects the inner level instead.
+                 
+                                                            *s_CTRL-S_R*
+CTRL-S r         Prompts for text to replace all occurrences of
+                 selected placeholder.
 
-                                                         *i_CTRL-S_P*
-CTRL-S p      Same as above, but selects previous instead.
-
-                                                         *s_CTRL-N*
-CTRL-N        Same as |i_CTRL-S_N|, but in select mode.
-
-                                                         *s_CTRL-S_N*
-CTRL-S n      Same as above, but selects the inner level instead.
-
-                                                         *s_CTRL-P*
-CTRL-P        Same as |i_CTRL-S_P|, but in select mode.
-
-                                                         *s_CTRL-S_P*
-CTRL-S p      Same as above, but selects the inner level instead.
-
-                                                         *s_CTRL-S_R*
-CTRL-S r      Prompts for text to replace all occurrences of
-              selected placeholder.
-                                                         *v_CTRL-S_E*
-CTRL-S e      Expands expressions within selected placeholder.
-              See |tangram-placeholders|.
-                                                         *v_CTRL-S_A*
-CTRL-S a      Adds placeholders delimiters to selected area.
-              See |g:tangram_open| and |g:tangram_close|.
-                                                         *v_CTRL-S_D*
-CTRL-S d      Deletes placeholders delimiters from selected area
-              and keeps internal text.
+|Visual-mode|
+                                                            *v_CTRL-S_E*
+CTRL-S e         Expands expressions within selected placeholder.
+                 See |tangram-placeholders|.
+                                                            *v_CTRL-S_A*
+CTRL-S a         Adds placeholders delimiters to selected area.
+                 See |g:tangram_open| and |g:tangram_close|.
+                                                            *v_CTRL-S_D*
+CTRL-S d         Deletes placeholders delimiters from selected area
+                 and keeps internal text.
 
 vim: set et ft=help :
