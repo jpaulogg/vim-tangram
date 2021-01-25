@@ -70,7 +70,7 @@ vim expression. See |s_CTRL-S_R|, |s_CTRL-S_D| and |s_CTRL-S_E|.
 
 A more realistic example from "~/.config/nvim/snippets/r/packages.snip":
 
-`packages <- c('i', '<{stringr}>', '<{forcats}>'<{ }>`
+`packages <- c('<{data.table}>', '<{stringr}>', '<{forcats}>'<{ }>`
               `<{'<{dplyr}>', '<{ggplot2}>', '<{ }>')}>`
 
 `for (p in packages) {`
