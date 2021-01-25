@@ -22,7 +22,7 @@ To install "raw" branch:
 ```bash
 # in vim use '~/.vim/' instead of '~/.config/nvim'
 curl -fLo ~/.config/nvim/plugin/vim-tangram -- create-dirs \
-	raw.githubusercontent.com/jpaulogg/vim-tangram/master/tangram.vim
+	https://raw.githubusercontent.com/jpaulogg/vim-tangram/master/tangram.vim
 ```
 
 ## Similar Plugins
