@@ -30,9 +30,9 @@ imap <unique> <C-s>p <C-c><SID>(select_prev)
 imap <unique> <C-s><C-n> <C-s>n
 imap <unique> <C-s><C-p> <C-s>p
 
-smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
 " <C-s>n in select mode jumps to inner placeholder. I only need this after <C-s>d.
 smap <unique> <C-s>n <C-c><SID>(select_next)
+smap <unique> <C-s>p <C-c>`<<SID>(select_prev)
 
 smap <unique> <C-p>  <C-c>`<<SID>(select_prev)
 smap <unique> <C-n>  <C-c>`><SID>(select_next)
