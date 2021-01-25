@@ -88,13 +88,13 @@ function TangramComplete(findstart, base)
 	else
         " complete subdirectories names like file completion
 		if getline('.') =~ '/'
-			let l:subdir = matchstr(getline('.'), "\\a\\+")
-			let l:input  = split(glob(s:dir.l:subdir.'/*'))
+			let l:subdir = matchstr(getline('.'), "\\a\\+").'/'
+			let l:input  = []
 		else
 			let l:subdir = &ft.'/'
-			let l:input  = split(glob(s:dir."*")) +
-			              \split(glob(s:dir.l:subdir."*"))
+			let l:input  = split(glob(s:dir."*"))
 		endif
+		let l:input += split(glob(s:dir.l:subdir.'*'))
 
 		let l:output = []
 		for i in l:input

@@ -17,7 +17,7 @@ like this is much more difficult than doing it on your vimrc.
 
 ## Installation
 
-To install "raw" branch:
+To install "raw" branch, just copy tangram.vim to your runtime. For example:
 
 ```bash
 # in vim use '~/.vim/' instead of '~/.config/nvim'
