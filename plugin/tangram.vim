@@ -104,8 +104,8 @@ endfunction
 
 " ADD/REMOVE PLACEHOLDERS DELIMITERS {{{1
 function s:Surround()
-	exec 'normal `>a'.g:tangram_close
-	exec 'normal `<i'.g:tangram_open
+	exec 'normal `>a'.g:tangram_close."\<Esc>"
+	exec 'normal `<i'.g:tangram_open."\<Esc>"
 	exec "normal va>"
 endfunction
 
