@@ -144,34 +144,23 @@ endif
 
 function TangramComplete(findstart, base)
 	if a:findstart
-		let l:line  = getline('.')
-		let l:start = col('.') - 1
-		while l:start > 0 && l:line[start - 1] =~ '\k'
-			let l:start -= 1
+		let line  = getline('.')
+		let start = col('.') - 1
+		while start > 0 && line[start - 1] =~ '\k'
+			let start -= 1
 		endwhile
-		return l:start
+		return start
 	else
         " complete subdirectories names like file completion
-		if getline('.') =~ '/'
-			let l:subdir = matchstr(getline('.'), "\\a\\+/")
-			let l:input  = []
-		else
-			let l:subdir = &ft.'/'
-			let l:input  = split(glob(g:tangram_dir."*"))
-		endif
-		let l:input += split(glob(g:tangram_dir.l:subdir.'*'))
+		let dirs   = empty(&ft) ? s:dir : s:dir.&ft.', '.s:dir
+		let subdir = matchstr(getline('.'), '^\w\+/')
+		let path   = empty(subdir) ? dirs : s:dir.subdir
 
-		let l:output = []
-		for i in l:input
-			if isdirectory(i)
-				let l:item = fnamemodify(i, ":t").'/'
-			else
-				let l:item = fnamemodify(i, ":t:r")
-			endif
-			if l:item =~ a:base
-				call add(l:output, {'word': l:item, 'menu': '[tangram]' })
-			endif
-		endfor
-		return l:output
+		let output = map(globpath(path, '*', 1, 1), {
+					\ list, item -> isdirectory(item) ?
+					\ fnamemodify(item, ':t').'/' : fnamemodify(item, ':t:r')})
+
+		call filter(output, 'v:val =~ "^".a:base')
+		return map(output, {list, item -> {'word': item, 'menu': '[tangram]'}})
 	endif
 endfunction
