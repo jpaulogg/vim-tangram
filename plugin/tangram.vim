@@ -152,9 +152,9 @@ function TangramComplete(findstart, base)
 		return start
 	else
         " complete subdirectories names like file completion
-		let dirs   = empty(&ft) ? s:dir : s:dir.&ft.', '.s:dir
+		let dirs   = empty(&ft) ? g:tangram_dir : s:dir.&ft.', '.s:dir
 		let subdir = matchstr(getline('.'), '^\w\+/')
-		let path   = empty(subdir) ? dirs : s:dir.subdir
+		let path   = empty(subdir) ? dirs : g:tangram_dir.subdir
 
 		let output = map(globpath(path, '*', 1, 1), {
 					\ list, item -> isdirectory(item) ?
