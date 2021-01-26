@@ -6,7 +6,7 @@
 
 " Branch:  raw
 " Licence: public domain
-" Last Change: 2021/01/17  
+" Last Change: 2021/01/26  
 
 if exists('g:loaded_tangram')
 	finish
@@ -24,7 +24,6 @@ imap <unique> <C-s><C-i> <C-s>i
 nmap <silent> <SID>(select_next) <Cmd>call search('<{', 'z')<CR>va><C-g>
 nmap <silent> <SID>(select_prev) <Cmd>call search('}>', 'b')<CR>va><C-g>
 
-" jump to prev/next placeholder (outer level)
 imap <unique> <C-s>n <C-c><SID>(select_next)
 imap <unique> <C-s>p <C-c><SID>(select_prev)
 imap <unique> <C-s><C-n> <C-s>n
@@ -50,15 +49,15 @@ vmap <unique><silent> <C-s>d <C-c>`<2x`>F}2xbev`<
 
 " INSERT FUNCTION {{{1
 function s:Insert() abort
-	let l:keyword = expand('<cWORD>')
-	let l:subdir = &ft.'/'                         " file type subdir
-	let l:file = s:dir.l:subdir.l:keyword.'.snip'  " try subdir first
+	let keyword = expand('<cWORD>')
+	let subdir = &ft.'/'                         " file type subdir
+	let file = s:dir.subdir.keyword.'.snip'      " try subdir first
 
-	if !filereadable(l:file)                       " otherwise, try main dir
-		let l:file = s:dir.l:keyword.'.snip'
+	if !filereadable(file)                       " otherwise, try main dir
+		let file = s:dir.keyword.'.snip'
 	endif
 	delete _
-	exec '-read '.l:file
+	exec '-read '.file
 
 	call cursor(line("'."), 1)
 	call search('<{', 'c')
@@ -68,8 +67,8 @@ endfunction
 " REPLACE FUNCTION {{{1
 function s:ReplaceAll()
 	normal gv"sy
-	let l:sub = input('')
-	exec '%s/'.@s.'/'.l:sub.'/g'
+	let new_text = input('')
+	exec '%s/'.@s.'/'.new_text.'/g'
 	call cursor(getpos("'<")[1:2])
 	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
 endfunction
@@ -79,36 +78,24 @@ set completefunc=TangramComplete
 
 function TangramComplete(findstart, base)
 	if a:findstart
-		let l:line  = getline('.')
-		let l:start = col('.') - 1
-		while l:start > 0 && l:line[start - 1] =~ '\k'
-			let l:start -= 1
+		let line  = getline('.')
+		let start = col('.') - 1
+		while start > 0 && line[start - 1] =~ '\k'
+			let start -= 1
 		endwhile
-		return l:start
+		return start
 	else
         " complete subdirectories names like file completion
-		if getline('.') =~ '/'
-			let l:subdir = matchstr(getline('.'), "\\a\\+").'/'
-			let l:input  = []
-		else
-			let l:subdir = &ft.'/'
-			let l:input  = split(glob(s:dir."*"))
-		endif
-		let l:input += split(glob(s:dir.l:subdir.'*'))
+		let dirs   = empty(&ft) ? s:dir : s:dir.&ft.','.s:dir
+		let subdir = matchstr(getline('.'), '^\w\+/')
+		let pathlist = empty(subdir) ? dirs : s:dir.subdir
 
-		let l:output = []
-		for i in l:input
-			if isdirectory(i)
-				let l:item = fnamemodify(i, ":t").'/'
-			else
-				let l:item = fnamemodify(i, ":t:r")
-			endif
-			if l:item =~ a:base
-				call add(l:output, {'word': l:item, 'menu': '[tangram]' })
-			endif
-		endfor
+		let output = map(globpath(pathlist, '*', 1, 1), {
+		           \ list, item -> isdirectory(item) ?
+		           \ fnamemodify(item, ':t').'/' : fnamemodify(item, ':t:r')
+		           \ })
 
-		return l:output
+		call filter(output, 'v:val =~ "^".a:base')
+		return map(output, {list, item -> {'word': item, 'menu': '[tangram]'}})
 	endif
 endfunction
-" }}}1
