@@ -110,7 +110,8 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	let l:open_pos  = cursor(line("'<"), col("'<"))
+	" delete open
+	let l:open_pos  = line("'<"), col("'<")
 	call cursor(l:open_pos)
 
 	let l:close_pos = searchpairpos(g:tangram_open, '', g:tangram_close, 'n')
@@ -121,19 +122,17 @@ function s:Dsurround() abort
 	let l:open_len = len(g:tangram_open)
 	exec 'normal '.l:open_len.'x'
 
-	" if open and close are in the same line
-	if l:open_pos[0] == l:close_pos[0]
+	" delete close
+	if l:open_pos[0] == l:close_pos[0]        " if delimiters are in the same line
 		let l:close_pos[1] -= l:open_len
 	endif
 	call cursor(l:close_pos)
-
 	let l:close_len = len(g:tangram_close)
 	exec 'normal '.l:close_len.'x'
 
 	if col('.') != 1
 		normal be
 	endif
-
 	exec "normal v`<"
 endfunction
 
@@ -152,7 +151,7 @@ function TangramComplete(findstart, base)
 		return start
 	else
         " complete subdirectories names like file completion
-		let dirs   = empty(&ft) ? g:tangram_dir : g:tangram_dir.&ft.','.g:tangram_dir
+		let dirs = empty(&ft) ? g:tangram_dir : g:tangram_dir.&ft.','.g:tangram_dir
 		let subdir = matchstr(getline('.'), '^\w\+/')
 		let path   = empty(subdir) ? dirs : g:tangram_dir.subdir
 
