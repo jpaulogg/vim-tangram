@@ -1,12 +1,12 @@
 " vim: set noet fdm=marker :
-" 'zR' to open and 'zM' to close all folds
+" zR to open and zM to close all folds
 
 " tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
 " Snippet plugin as minimal as a tangram puzzle!
 
 " Branch:  master
 " Licence: public domain
-" Last Change: 2021/01/14  
+" Last Change: 2021/01/29  
 
 if exists('g:loaded_tangram')
 	finish
@@ -74,9 +74,9 @@ function s:Insert() abort
 	if !filereadable(l:file)                               " otherwise, try main dir
 		let l:file = g:tangram_dir.l:keyword.'.snip'
 	endif
+
 	delete _
 	exec '-read '.l:file
-
 	call cursor(line("'."), 1)
 	call search(g:tangram_open, 'c')
 	exec "normal va>\<C-g>"
@@ -84,22 +84,22 @@ endfunction
 
 " DEALING WITH PLACEHOLDERS CONTENT {{{1
 function s:ExpandVimExpr()
-	let l:save_reg = @s
+	let save_reg = @s
 	normal gv"sy
-	exec 'let l:expr = '.substitute(@s, g:tangram_open.'\|'.g:tangram_close, '', 'g')
-	exec 'normal gvc'.l:expr
+	exec 'let expr = '.substitute(@s, g:tangram_open.'\|'.g:tangram_close, '', 'g')
+	exec 'normal gvc'.expr
 	exec "normal v`<\<C-g>"
-	let @s = l:save_reg
+	let @s = save_reg
 endfunction
 
 function s:ReplaceAll()
-	let l:save_reg = @s
+	let save_reg = @s
 	normal gv"sy
-	let l:sub = input('')
-	exec '%s/'.@s.'/'.l:sub.'/g'
+	let new_text = input('')
+	exec '%s/'.@s.'/'.escape(new_text, '/').'/g'
 	call cursor(line("'<"), col("'<"))
-	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
-	let @s = l:save_reg
+	exec 'normal v'.(len(new_text) - 1)."l\<C-g>"
+	let @s = save_reg
 endfunction
 
 " ADD/REMOVE PLACEHOLDERS DELIMITERS {{{1
@@ -110,26 +110,27 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	" delete open
-	let l:open_pos  = line("'<"), col("'<")
-	call cursor(l:open_pos)
+	" delete opening
+	let open_pos  = [line("'<"), col("'<")]
+	call cursor(open_pos)
 
-	let l:close_pos = searchpairpos(g:tangram_open, '', g:tangram_close, 'n')
-	if l:close_pos == [0, 0]
+	let close_pos = searchpairpos(g:tangram_open, '', g:tangram_close, 'n')
+	if close_pos == [0, 0]
 		return
 	endif
 
-	let l:open_len = len(g:tangram_open)
-	exec 'normal '.l:open_len.'x'
+	let open_len = len(g:tangram_open)
+	exec 'normal '.open_len.'x'
 
-	" delete close
-	if l:open_pos[0] == l:close_pos[0]        " if delimiters are in the same line
-		let l:close_pos[1] -= l:open_len
+	" delete closing
+	if open_pos[0] == close_pos[0]        " if delimiters are in the same line
+		let close_pos[1] -= open_len
 	endif
-	call cursor(l:close_pos)
-	let l:close_len = len(g:tangram_close)
-	exec 'normal '.l:close_len.'x'
+	call cursor(close_pos)
+	let close_len = len(g:tangram_close)
+	exec 'normal '.close_len.'x'
 
+	" reselecting
 	if col('.') != 1
 		normal be
 	endif
