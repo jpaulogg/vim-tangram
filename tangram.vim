@@ -1,5 +1,5 @@
 " vim: set noet fdm=marker :
-" 'zR' to open and 'zM' to close all folds
+" zR to open and zM to close all folds
 
 " tangram.vim - <https://github.com/jpaulogg/vim-tangram.git>
 " Code snippets as minimal as a tangram puzzle!
@@ -56,9 +56,9 @@ function s:Insert() abort
 	if !filereadable(file)                       " otherwise, try main dir
 		let file = s:dir.keyword.'.snip'
 	endif
+
 	delete _
 	exec '-read '.file
-
 	call cursor(line("'."), 1)
 	call search('<{', 'c')
 	exec "normal va<\<C-g>"    
@@ -68,9 +68,9 @@ endfunction
 function s:ReplaceAll()
 	normal gv"sy
 	let new_text = input('')
-	exec '%s/'.@s.'/'.new_text.'/g'
-	call cursor(getpos("'<")[1:2])
-	exec 'normal v'.(len(l:sub) - 1)."l\<C-g>"
+	exec '%s/'.@s.'/'.escape(new_text, '/').'/g'
+	call cursor(line("'<"), col("'<"))
+	exec 'normal v'.(len(new_text) - 1)."l\<C-g>"
 endfunction
 
 " COMPLETE FUNCTION {{{1
