@@ -84,22 +84,25 @@ endfunction
 
 " DEALING WITH PLACEHOLDERS CONTENT {{{1
 function s:ExpandVimExpr()
-	let save_reg = @s
-	normal gv"sy
-	let expr = eval(substitute(@s, g:tangram_open.'\|'.g:tangram_close, '', 'g'))
-	exec 'normal gvc'.expr
+	let save_reg = @t
+	normal gv"ty
+	let expr = substitute(@t, g:tangram_open.'\|'.g:tangram_close, '', 'g')
+	exec 'normal gvc'.eval(expr)
 	exec "normal v`<\<C-g>"
-	let @s = save_reg
+	let @t = save_reg
 endfunction
 
 function s:ReplaceAll()
-	let save_reg = @s
-	normal gv"sy
-	let new_text = input('')
-	exec '%s/'.@s.'/'.escape(new_text, '/').'/g'
+	let save_reg = @t
+	normal gv"ty
+	let pattern = escape(@t, '/')
+	let input   = input('')
+	let string  = escape(input, '/')
+	exec '%substitute/'.pattern.'/'.string.'/g'
 	call cursor(line("'<"), col("'<"))
-	exec 'normal v'.(len(new_text) - 1)."l\<C-g>"
-	let @s = save_reg
+	call search(input, 'bc')
+	exec 'normal v'.(len(input) - 1)."l\<C-g>"
+	let @t = save_reg
 endfunction
 
 " ADD/REMOVE PLACEHOLDERS DELIMITERS {{{1
@@ -110,7 +113,6 @@ function s:Surround()
 endfunction
 
 function s:Dsurround() abort
-	" delete opening
 	let open_pos  = [line("'<"), col("'<")]
 	call cursor(open_pos)
 
@@ -119,10 +121,11 @@ function s:Dsurround() abort
 		return
 	endif
 
+	" deleting <{
 	let open_len = len(g:tangram_open)
 	exec 'normal '.open_len.'x'
 
-	" delete closing
+	" deleting }>
 	if open_pos[0] == close_pos[0]        " if delimiters are in the same line
 		let close_pos[1] -= open_len
 	endif
@@ -141,6 +144,8 @@ endfunction
 if &completefunc == ''
 	set completefunc=TangramComplete
 endif
+" if you prefere, you can use something like this:
+" imap <C-s><C-u> <Cmd>set completefunc=TangramComplete<CR><C-x><C-u>
 
 function TangramComplete(findstart, base)
 	if a:findstart

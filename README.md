@@ -56,8 +56,8 @@ occurrences, confirm the surrounded text or trigger a vim expression.
 
 `<{...}>, <{replace all occurrences}>, <{default value}>, <{strftime('%c')}>`
 
-You can define placeholders string with the placeholder delimiters with the `g:tangram_open` and
-`g:tangram_close` [variables](https://github.com/jpaulogg/vim-tangram/blob/391fee3f58731022fe064fcd9a29ec0753af7abd/doc/tangram.txt#L116-L127).
+You can define placeholders delimiters string with the `g:tangram_open` and `g:tangram_close`
+[variables](https://github.com/jpaulogg/vim-tangram/blob/391fee3f58731022fe064fcd9a29ec0753af7abd/doc/tangram.txt#L116-L127).
 
 ## Installation
 
